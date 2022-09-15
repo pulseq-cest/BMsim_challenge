@@ -83,7 +83,7 @@ cest_pool: {
 # b0_inhom: field inhomogeneity [ppm], default is 0.0 (float)
 #   rel_b1: relative amp inhomogeneity, default is 1.0 (float)
 b0: 3
-gamma: 267.5153
+gamma: 267.5154109126009
 b0_inhom: 0.0
 rel_b1: 1
 
