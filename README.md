@@ -18,10 +18,10 @@ Prep. sequence APTw_3T_000: https://github.com/kherz/pulseq-cest-library/blob/22
 
 We assume fully relaxed initial magnetization Zi=1, and a cw saturation period of 2s and 2µT.
 
-Zi=1, tsat=2 s, B1= 2 µT cw;		
-offset list: -15:0.25:15 ppm		
-gamma	:	42.576400 MHz/T
-FREQ(3T) : 	127.7292	MHz
+- Zi=1, tsat=2 s, B1= 2 µT cw;		
+- offset list: -15:0.25:15 ppm		
+- gamma	:	42.576400 MHz/T
+- FREQ(3T) : 	127.7292	MHz
 
 ## Challenge 2: 2p - APTw_3T_000
 Pool model 2 pool creatine:	https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/sim-library/z_phantom_creatine_3T_pH6.4_T22C_bmsim.yaml
@@ -30,10 +30,10 @@ Prep. sequence APTw_3T_000: https://github.com/kherz/pulseq-cest-library/blob/22
 
 We assume fully relaxed initial magnetization Zi=1, and a cw saturation period of 2s and 2µT.
 
-Zi=1, tsat=2 s, B1= 2 µT cw;		
-offset list: -15:0.25:15 ppm
-gamma	:	42.576400 MHz/T
-FREQ(3T) : 	127.7292	MHz
+- Zi=1, tsat=2 s, B1= 2 µT cw;		
+- offset list: -15:0.25:15 ppm
+- gamma	:	42.576400 MHz/T
+- FREQ(3T) : 	127.7292	MHz
 
 ## Challenge 1: 7pWM - WASABI_3T_001
 Pool model WM_default:	https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml
@@ -42,10 +42,10 @@ Prep. sequence WASABI_3T_001: https://github.com/kherz/pulseq-cest-library/tree/
 
 We assume fully relaxed initial magnetization Zi=1, and a cw saturation period of 2s and 2µT.
 
-Zi=1, tsat=0.05s, B1= 3.7µT cw;
-offset list: -2: 1/6 :2 ppm
-gamma	:	42.576400 MHz/T
-FREQ(3T) : 	127.7292	MHz
+- Zi=1, tsat=0.05s, B1= 3.7µT cw;
+- offset list: -2: 1/6 :2 ppm
+- gamma	:	42.576400 MHz/T
+- FREQ(3T) : 	127.7292	MHz
 
 ## General simulation remarks
 
