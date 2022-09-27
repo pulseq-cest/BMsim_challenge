@@ -61,5 +61,5 @@ by 2pi yields
 
 rounded to 4 digits yields **42.5764 MHz/T**
 
-We use this value everywhere in teh simulations directly and multiply it with 2pi if needed.
+We use this value everywhere in the simulations directly and multiply it with 2pi if needed.
 
