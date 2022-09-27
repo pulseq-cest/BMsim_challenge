@@ -4,7 +4,7 @@ Repository for the Bloch-McConnell simulation (BMsim) challenge.
 **Challenge:**
 - Simulate with your Bloch-McConnell simulation 3 defined sequences in two defined pool models.
 - Add your simulation to the google sheet below.
-- The meadian Z-spectrum wins. (and we can then discuss about this, and more challenges)
+- The median Z-spectrum wins. (and we can then discuss about this, and more challenges)
 
 Find the corresponding google sheet at:
 https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/
