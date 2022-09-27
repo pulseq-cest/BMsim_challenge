@@ -2,8 +2,8 @@
 Repository for the Bloch-McConnell simulation (BMsim) challenge.
 
 **Challenge:**
-- Simulate with your Bloch-McConnell simulation 3 defined sequences in two defined pool models.
-- Add your simulation to the google sheet below.
+- Simulate with your own Bloch-McConnell simulation defined sequences in defined pool models.
+- Add your simulation result to the google sheet below.
 - The median Z-spectrum wins. (and we can then discuss about this, and more challenges)
 
 Find the corresponding google sheet at:
@@ -50,6 +50,9 @@ We assume fully relaxed initial magnetization Zi=1, and a cw saturation period o
 
 ## General simulation remarks
 
+We assume fully relaxed initial magnetization Zi=1, and until now cw saturation (or a block pulse or rect pulse).
+The z-magnetization of the water pool after this preparation forms the Z-value at each offset or the Z-spectrum.
+
 ### gamma
 Already a different gamma can yield deviations in simulations.
 Thus we define our used value as the shielded gamma/2pi value in Hz with four digits = **42.5764 MHz/T**
@@ -63,4 +66,16 @@ by 2pi yields
 rounded to 4 digits yields **42.5764 MHz/T**
 
 We use this value everywhere in the simulations directly and multiply it with 2pi if needed.
+
+
+### fraction definition
+There could be different definitions of the fraction, some define water f=1, and all other relative to water.
+Others define M0i of each pool i and then normalize fi= M0i/sum_i(M0i)
+
+This could lead to differences.
+
+### MT definition
+Some simulations use x, y, and z components to describe a Lorentzian MT pool.
+Others use only th z-component and assume a Lorentzian lineshape factor there.
+
 
