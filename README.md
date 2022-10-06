@@ -22,13 +22,13 @@ Please feel free to add your name / group in case it's not listed yet and post y
   2) gyromagnetic ratio: 42.5764 MHz/T
   3) larmor frequency (3T): 127.7292 MHz/T  
 
-### Case 1: 7 pool model, APTw preparation
-  - **pool model**: 7 pool model of WM as defined in [challenge_1_7pool_model.yaml](/challenge_1/challenge_1_7pool_model.yaml)
+### Case 1: 5 pool model, APTw preparation
+  - **pool model**: 5 pool model of WM as defined in [challenge_1_5pool_model.yaml](/challenge_1/challenge_1_5pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 2 s
     - pulse power: 2 µT
-    - offset list: -15:0.25:15 ppm
+    - offset list: -15:0.1:15 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/challenge_1/README.md)
 
@@ -38,17 +38,17 @@ More details about the pool model and preparation scheme can be found in the cor
     - pulse shape: block
     - pulse duration: 2 s
     - pulse power: 2 µT
-    - offset list: -15:0.25:15 ppm
+    - offset list: -15:0.1:15 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/challenge_2/README.md)
 
 ### Case 3: 7 pool model, WASABI preparation
-  - **pool model**: 7 pool model of WM as defined in [challenge_1_7pool_model.yaml](/challenge_1/challenge_1_7pool_model.yaml)
+  - **pool model**: 7 pool model of WM as defined in [challenge_1_5pool_model.yaml](/challenge_1/challenge_1_5pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 5 ms
     - pulse power: 3.7 µT
-    - offset list: -2:0.1:2 ppm
+    - offset list: -2:0.05:2 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/challenge_3/README.md)
 
