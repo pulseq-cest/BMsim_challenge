@@ -1,10 +1,10 @@
 # BMsim challenge - CASE 1
 
 ## Pool model:
-The pool model of case 1 (and case 3) is identical to the [WM_3T_default_7pool_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml)
+The pool model of case 1 (and case 3) is similar to the [WM_3T_default_7pool_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml)
 model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library). It consists of:
  - 1 water pool
- - 4 CEST pools
+ - 2 CEST pools
  - 1 NOE pool 
  - 1 Lorentzian shaped MT pool
 
@@ -41,22 +41,6 @@ model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-ces
       - dw: 2
 
 
-  - cest pool 3: "amine"
-      - f: 0.0009009
-      - T1: 1.0
-      - T2: 0.1
-      - k: 5000
-      - dw: 3
-
-
-  - cest pool 4: "OH"
-      - f: 0.0009009
-      - T1: 1.0
-      - T2: 0.1
-      - k: 3500
-      - dw: 1.0
-
-
   - NOE pool:
       - f: 0.0045
       - T1: 1.3
@@ -64,7 +48,7 @@ model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-ces
       - k: 20
       - dw: -3
 
-More details and references are given in [challenge_1_7pool_model.yaml](/challenge_1/challenge_1_7pool_model.yaml)
+More details and references are given in [challenge_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
 
 ## Preparation scheme:
 The preparation scheme for case 1 is identical to the 
@@ -77,5 +61,5 @@ The preparation settings are:
   - pulse power: 2 µT
   - offset list: -15:0.25:15 ppm
 
-A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of challenge 1](/challenge_1)
+A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of challenge 1](/case_1)
   

@@ -52,21 +52,6 @@ cest_pool: {
     k: 1000,
     dw: 2
   },
-  'amine_1': {
-    f: 0.0009009,  # 100e-3 / 111, 
-    t1: 1.0,
-    t2: 0.1,
-    k: 5000,
-    dw: 3
-  },
-  'OH_1': {
-    f: 0.0009009,  # 100e-3 / 111, 
-    t1: 1.0,
-    t2: 0.1,
-    k: 3500,
-    dw: 1.0
-  },
-
   'NOE_1': { #% until now, all 4 pools from the reference paper combined in one at -3.5 ppm with 5 fold concentration
     f: 0.0045, #500e-3 / 111,
     t1: 1.3,
