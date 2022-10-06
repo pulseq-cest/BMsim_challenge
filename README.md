@@ -18,9 +18,10 @@ Please feel free to add your name / group in case it's not listed yet and post y
 
 ## Simulation cases
 ### General settings / assumptions:
-  1) fully relaxed initial magnetization (Zi = 1) for every offset
-  2) gyromagnetic ratio: 42.5764 MHz/T
-  3) larmor frequency (3T): 127.7292 MHz/T  
+  1) fully relaxed initial magnetization (Zi = 1) for every offset,this is equivalent to a very long recovery time 10*T1	
+  2) post-preparation delay = 6.5 ms, in the pusleq-Fiel this corresponds to the gradient spoiler duration
+  3) gyromagnetic ratio: 42.5764 MHz/T
+  4) larmor frequency (3T): 127.7292 MHz/T  
 
 ### Case 1: 5 pool model, APTw preparation
   - **pool model**: 5 pool model of WM as defined in [challenge_1_5pool_model.yaml](/challenge_1/challenge_1_5pool_model.yaml)
