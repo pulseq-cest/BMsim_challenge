@@ -1,0 +1,83 @@
+####################################################################################
+# ------ Simulation settings for (py)pulseq-cest BlochMcConnell simulations ------ #
+# ------------------------ https://pulseq-cest.github.io/ ------------------------ #
+####################################################################################
+# Simulation parameters for white matter at 3T 
+# This file is inspired by WM_001, but all numbers are made simpler to form a easy to share default model
+#
+# - 4 CEST pools
+# - 1 NOE pool      
+# - a Lorentzian shaped MT pool (with adjusted R2x by a factor 0.23, this makes the pool shiftable
+#
+# sources/references for settings in this file:
+# CEST pools: https://doi.org/10.1016/j.neuroimage.2017.04.045
+
+###### Pool settings
+#         f: relative pool size fraction (float)
+#        t1: longitudinal relaxation time T1 = 1/R1 [s] (float)
+#        t2: transversal relaxation time T2 = 1/R2 [s] (float)
+#         k: exchange rate [Hz] to water pool (MT and CEST pools only) (float)
+#        dw: chemical shift (delta omega) relative to water [ppm] (MT and CEST pools only) (float)
+# lineshape: lineshape of the MT Pool ('Lorentzian', 'SuperLorentzian' or 'None') (str)
+
+### water pool   # as in WM_3T_001
+water_pool: {
+  f: 1.0,
+  t1: 1.0,
+  t2: 0.040
+}
+
+### MT pool  pectra
+mt_pool: {
+  f:  0.1351, #15 / 111,
+  t1: 1.0,
+  t2: 4.0e-05 ,  # adjusted to have similar shape to SuperLorentzian
+  k:  30,
+  dw: -3.0,  # leads to most simlar asym at 15 ppm of - 3%
+  lineshape: 'Lorentzian'
+}
+
+cest_pool: {  
+  'amide': {
+    f: 0.0009009,  # 100e-3 / 111, 
+    t1: 1.0,
+    t2: 0.1,
+    k: 50,
+    dw: 3.5
+  },
+  'guanidine_1': {       # eight times the value of WM_3T_001, needed to get the peak at 1.5 ppm in MTRasym
+    f: 0.0009009,  # 100e-3 / 111, 
+    t1: 1.0,
+    t2: 0.1,
+    k: 1000,
+    dw: 2
+  },
+  'NOE_1': { #% until now, all 4 pools from the reference paper combined in one at -3.5 ppm with 5 fold concentration
+    f: 0.0045, #500e-3 / 111,
+    t1: 1.3,
+    t2: 0.005,
+    k: 20,
+    dw: -3
+  }
+}
+
+
+###### Scanner settings
+#       b0: field strength [T] (float)
+#    gamma: gyromagnetic ratio [rad / uT], default is 267.5153 (float)
+# b0_inhom: field inhomogeneity [ppm], default is 0.0 (float)
+#   rel_b1: relative amp inhomogeneity, default is 1.0 (float)
+b0: 3
+gamma: 267.5154109126009
+b0_inhom: 0.0
+rel_b1: 1
+
+##### Additional simulation settings
+#           verbose: verbose output, default is False (bool)
+#    reset_init_mag: True to reset magnetization after each readout, default is True (bool)
+#             scale: relative magnetization after reset of magnetization, default is 1 (float)
+# max_pulse_samples: maximum number of samples for each shaped rf pulse, default is 500 (int)
+verbose: False
+reset_init_mag: True
+scale: 1
+max_pulse_samples: 300

@@ -1,81 +1,77 @@
-# BMsim challenge
-Repository for the Bloch-McConnell simulation (BMsim) challenge.
+# == BMsim challenge ==
+Welcome to the repository of the Bloch-McConnell simulation (BMsim) challenge. 
+The idea of the challenge can be summarized as follows:
 
-**Challenge:**
-- Simulate with your own Bloch-McConnell simulation defined sequences in defined pool models.
-- Add your simulation result to the google sheet below.
-- The median Z-spectrum wins. (and we can then discuss about this, and more challenges)
+  1) Every participant simulates 3 different well-defined cases / scenarios
+  2) The simulation results from all participants are collected
+  3) The median Z-spectrum wins
 
-Find the corresponding google sheet at:
+In this first challenge, we have chosen 3 different preparation schemes consisting of single block pulses / CW pulses only. Next challenges might cover more sophisticated cases using arbitrary shaped RF pulses as well.
+
+## Simulation results
+To keep the burden for posting your simulation results as low as possible, we decided to collect the results in a simple
+Google Docs spreadsheet that can be found here:
+
 https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/
 
-Find the .seq and BMsim.yaml files in seq and sim folders, respectively. Or by following the links below or in the google sheet.
+Please feel free to add your name / group in case it's not listed yet and post your results.
+
+## Simulation cases
+### General settings / assumptions:
+  1) fully relaxed initial magnetization (Zi = 1) for every offset,this is equivalent to a very long recovery time 10*T1	
+  2) post-preparation delay = 6.5 ms, in the pulseq-file this corresponds to the gradient spoiler duration
+  3) gyromagnetic ratio: 42.5764 MHz/T
+  4) larmor frequency (3T): 127.7292 MHz/T  
+
+### Case 1: 5 pool model, APTw preparation
+  - **pool model**: 5 pool model of WM as defined in [case_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
+  - **prep. details**:
+    - pulse shape: block
+    - pulse duration: 2 s
+    - pulse power: 2 µT
+    - offset list: -15:0.1:15 ppm
+
+More details about the pool model and preparation scheme can be found in the corresponding [README](/case_1/README.md)
+
+### Case 2: 2 pool model, APTw preparation
+  - **pool model**: 2 pool model of WM as defined in [case_2_2pool_model.yaml](/case_2/case_2_2pool_model.yaml)
+  - **prep. details**:
+    - pulse shape: block
+    - pulse duration: 2 s
+    - pulse power: 2 µT
+    - offset list: -15:0.1:15 ppm
+
+More details about the pool model and preparation scheme can be found in the corresponding [README](/case_2/README.md)
+
+### Case 3: 5 pool model, WASABI preparation
+  - **pool model**: 5 pool model of WM as defined in [case_3_5pool_model.yaml](/case_3/case_3_5pool_model.yaml)
+  - **prep. details**:
+    - pulse shape: block
+    - pulse duration: 5 ms
+    - pulse power: 3.7 µT
+    - offset list: -2:0.05:2 ppm
+
+More details about the pool model and preparation scheme can be found in the corresponding [README](/case_3/README.md)
+
+## FAQ
+#### How did you choose the value of the gyromagnetic ratio?
+
+The [NIST value of the shielded proton gyromagnetic ratio](https://physics.nist.gov/cgi-bin/cuu/Value?gammapp) is
+2.675153151 x 10<sup>8</sup> s<sup>-1</sup> T<sup>-1</sup>. Dividing this value by 2 Pi yields 42.576384750950949004433240733872 MHz/T, which results
+in the used value of 42.5764 MHz/T when rounded to 4 digits.
+
+Please make sure to use these values for gamma in your simulations:
+  - 42.5764 MHz/T
+  - 42.5764 x 2 x Pi s<sup>-1</sup> T<sup>-1</sup> (do **NOT** use the exact NIST value)
 
 
-## Challenge 1: 7pWM - APTw_3T_000
-Pool model WM_default:	https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml
-
-Prep. sequence APTw_3T_000: https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/seq-library/APTw_3T_000_2uT_1block_2s_braintumor/	 	
-
-We assume fully relaxed initial magnetization Zi=1, and a cw saturation period of 2s and 2µT.
-
-- Zi=1, tsat=2 s, B1= 2 µT cw;		
-- offset list: -15:0.25:15 ppm		
-- gamma	:	42.576400 MHz/T
-- FREQ(3T) : 	127.7292	MHz
-
-## Challenge 2: 2p - APTw_3T_000
-Pool model 2 pool creatine:	https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/sim-library/z_phantom_creatine_3T_pH6.4_T22C_bmsim.yaml
-
-Prep. sequence APTw_3T_000: https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/seq-library/APTw_3T_000_2uT_1block_2s_braintumor/	 	
-
-We assume fully relaxed initial magnetization Zi=1, and a cw saturation period of 2s and 2µT.
-
-- Zi=1, tsat=2 s, B1= 2 µT cw;		
-- offset list: -15:0.25:15 ppm
-- gamma	:	42.576400 MHz/T
-- FREQ(3T) : 	127.7292	MHz
-
-## Challenge 1: 7pWM - WASABI_3T_001
-Pool model WM_default:	https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml
-
-Prep. sequence WASABI_3T_001: https://github.com/kherz/pulseq-cest-library/tree/22009a462a689e10f407374efc0d63760344519b/seq-library/WASABI_3T_001_3p7uT_1block_5ms
-
-We assume fully relaxed initial magnetization Zi=1, and a cw saturation period of 2s and 2µT.
-
-- Zi=1, tsat=0.05s, B1= 3.7µT cw;
-- offset list: -2: 1/6 :2 ppm
-- gamma	:	42.576400 MHz/T
-- FREQ(3T) : 	127.7292	MHz
-
-## General simulation remarks
-
-We assume fully relaxed initial magnetization Zi=1, and until now cw saturation (or a block pulse or rect pulse).
-The z-magnetization of the water pool after this preparation forms the Z-value at each offset or the Z-spectrum.
-
-### gamma
-Already a different gamma can yield deviations in simulations.
-Thus we define our used value as the shielded gamma/2pi value in Hz with four digits = **42.5764 MHz/T**
-
-Dividing the value of 
-https://physics.nist.gov/cgi-bin/cuu/Value?gammapp 
-by 2pi yields
-
-42.5763 84750950949004433240733872 MHz/T 
-
-rounded to 4 digits yields **42.5764 MHz/T**
-
-We use this value everywhere in the simulations directly and multiply it with 2pi if needed.
-
-
-### fraction definition
+#### How do you define the pool size fraction f?
 There could be different definitions of the fraction, some define water f=1, and all other relative to water.
 Others define M0i of each pool i and then normalize fi= M0i/sum_i(M0i)
 
-This could lead to differences.
+This could lead to differences, but we decided NOT to dictate which definition to use.
 
-### MT definition
+#### How do you define the MT pool?
 Some simulations use x, y, and z components to describe a Lorentzian MT pool.
-Others use only th z-component and assume a Lorentzian lineshape factor there.
-
-
+Others use only the z-component and assume a Lorentzian lineshape factor there.
+Again, we decided NOT to dictate how to simulate the MT.

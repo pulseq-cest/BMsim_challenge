@@ -25,7 +25,7 @@ seq_defs.Trec          = 3.5             ; % recovery time [s]
 seq_defs.Trec_M0       = 3.5             ; % recovery time before M0 [s]
 seq_defs.M0_offset     = -1560           ; % m0 offset [ppm]
 seq_defs.DCsat         = (seq_defs.tp)/(seq_defs.tp+seq_defs.td); % duty cycle
-seq_defs.offsets_ppm   = [seq_defs.M0_offset -15:0.25:15]; % offset vector [ppm]
+seq_defs.offsets_ppm   = [seq_defs.M0_offset -15:0.1:15]; % offset vector [ppm]
 seq_defs.num_meas      = numel(seq_defs.offsets_ppm)   ; % number of repetition
 seq_defs.Tsat          = seq_defs.n_pulses*(seq_defs.tp+seq_defs.td) - ...
                          seq_defs.td ;  % saturation time [s]
