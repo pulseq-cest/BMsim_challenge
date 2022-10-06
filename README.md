@@ -44,7 +44,7 @@ More details about the pool model and preparation scheme can be found in the cor
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_2/README.md)
 
 ### Case 3: 5 pool model, WASABI preparation
-  - **pool model**: 7 pool model of WM as defined in [case_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
+  - **pool model**: 5 pool model of WM as defined in [case_3_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 5 ms
