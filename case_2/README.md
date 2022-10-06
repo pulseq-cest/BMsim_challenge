@@ -23,7 +23,7 @@ model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-ces
       - dw: 1.9
 
 
-More details and references are given in [challenge_2_2pool_model.yaml](/case_2/case_2_2pool_model.yaml)
+More details and references are given in [case_2_2pool_model.yaml](/case_2/case_2_2pool_model.yaml)
 
 ## Preparation scheme:
 The preparation scheme for case 2 is identical to the 
@@ -34,7 +34,7 @@ The preparation settings are:
   - pulse shape: block
   - pulse duration: 2 s
   - pulse power: 2 µT
-  - offset list: -15:0.25:15 ppm
+  - offset list: -15:0.1:15 ppm
 
 A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of challenge 2](/case_2)
   

@@ -19,12 +19,12 @@ Please feel free to add your name / group in case it's not listed yet and post y
 ## Simulation cases
 ### General settings / assumptions:
   1) fully relaxed initial magnetization (Zi = 1) for every offset,this is equivalent to a very long recovery time 10*T1	
-  2) post-preparation delay = 6.5 ms, in the pusleq-Fiel this corresponds to the gradient spoiler duration
+  2) post-preparation delay = 6.5 ms, in the pulseq-file this corresponds to the gradient spoiler duration
   3) gyromagnetic ratio: 42.5764 MHz/T
   4) larmor frequency (3T): 127.7292 MHz/T  
 
 ### Case 1: 5 pool model, APTw preparation
-  - **pool model**: 5 pool model of WM as defined in [challenge_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
+  - **pool model**: 5 pool model of WM as defined in [case_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 2 s
@@ -34,7 +34,7 @@ Please feel free to add your name / group in case it's not listed yet and post y
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_1/README.md)
 
 ### Case 2: 2 pool model, APTw preparation
-  - **pool model**: 2 pool model of WM as defined in [challenge_2_2pool_model.yaml](/case_2/case_2_2pool_model.yaml)
+  - **pool model**: 2 pool model of WM as defined in [case_2_2pool_model.yaml](/case_2/case_2_2pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 2 s
@@ -43,8 +43,8 @@ More details about the pool model and preparation scheme can be found in the cor
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_2/README.md)
 
-### Case 3: 7 pool model, WASABI preparation
-  - **pool model**: 7 pool model of WM as defined in [challenge_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
+### Case 3: 5 pool model, WASABI preparation
+  - **pool model**: 7 pool model of WM as defined in [case_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 5 ms
