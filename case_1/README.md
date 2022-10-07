@@ -26,13 +26,14 @@ model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-ces
 More details and references are given in [case_1_2pool_model.yaml](/case_1/case_1_2pool_model.yaml)
 
 ## Preparation scheme:
-The preparation scheme for case 1 is identical to the 
+The preparation scheme for case 1 is based on 
 [APTw_3T_000_2uT_1block_2s_braintumor](https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/seq-library/APTw_3T_000_2uT_1block_2s_braintumor/)
-scheme published in the published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library).
+scheme published in the published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library),
+but with 30 seconds of saturation to be close to steady-state (10*T1, deviation from steady state <10^-4)
 
 The preparation settings are:
   - pulse shape: block
-  - pulse duration: 2 s
+  - pulse duration: 15 s
   - pulse power: 2 µT
   - offset list: -15:0.1:15 ppm
 

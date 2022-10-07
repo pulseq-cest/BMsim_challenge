@@ -27,7 +27,7 @@ Please feel free to add your name / group in case it's not listed yet and post y
   - **pool model**: 2 pool model of creatine as defined in [case_1_2pool_model.yaml](/case_1/case_1_2pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
-    - pulse duration: 2 s
+    - pulse duration: 15 s
     - pulse power: 2 µT
     - offset list: -15:0.1:15 ppm
 

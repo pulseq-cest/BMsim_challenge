@@ -23,7 +23,7 @@ seq_defs.tp            = 5e-3           ; % pulse duration [s]
 seq_defs.Trec          = 3              ; % recovery time [s]
 seq_defs.Trec_M0       = 12             ; % recovery time before M0 [s]
 seq_defs.M0_offset     = -300           ; % m0 offset [ppm]
-seq_defs.offsets_ppm   = [seq_defs.M0_offset -2:0.0.5:2]; % offset vector [ppm]
+seq_defs.offsets_ppm   = [seq_defs.M0_offset -2:0.05:2]; % offset vector [ppm]
 seq_defs.num_meas      = numel(seq_defs.offsets_ppm)   ; % number of repetition
 seq_defs.Tsat          = seq_defs.tp     ;  % saturation time [s]
 seq_defs.B0            = 3               ; % B0 [T]
@@ -85,11 +85,8 @@ for n_id = 1:numel(def_fields)
 end
 seq.write(seq_filename, author);
 
-%% plot
-saveSaturationPhasePlot(seq_filename);
-
 %% call standard sim
-M_z = simulate_pulseqcest(seq_filename,'../../sim-library/WM_3T_default_7pool_bmsim.yaml');
+M_z = simulate_pulseqcest(seq_filename,'case_4_5pool_model.yaml');
 
 %% plot
 plotSimulationResults(M_z,offsets_ppm, seq_defs.M0_offset);

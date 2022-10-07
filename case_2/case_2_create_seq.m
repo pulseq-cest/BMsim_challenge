@@ -105,11 +105,9 @@ for n_id = 1:numel(def_fields)
 end
 seq.write(seq_filename, author);
 
-%% plot
-saveSaturationPhasePlot(seq_filename);
 warndlg(' This sequence will not run on all scanners with DC limits and can crash the scanner software! Use pulsed sequences instead' )
 %% call standard sim
-M_z = simulate_pulseqcest(seq_filename,'../../sim-library/WM_3T_default_7pool_bmsim.yaml');
+M_z = simulate_pulseqcest(seq_filename,'case_2_2pool_model.yaml');
 figure('Name','Z-asym');
 plotSimulationResults(M_z,offsets_ppm,seq_defs.M0_offset);
 

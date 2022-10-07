@@ -19,7 +19,7 @@ end
 %% sequence definitions
 % everything in seq_defs gets written as definition in .seq-file
 seq_defs.n_pulses      = 1              ; % number of pulses
-seq_defs.tp            = 2           ; % pulse duration [s]
+seq_defs.tp            = 15           ; % pulse duration [s]
 seq_defs.td            = 0            ; % interpulse delay [s]
 seq_defs.Trec          = 3.5             ; % recovery time [s]
 seq_defs.Trec_M0       = 3.5             ; % recovery time before M0 [s]
@@ -96,8 +96,6 @@ for currentOffset = offsets_Hz
     seq.addPseudoADCBlock(); % readout trigger event
 end
 
-
-
 %% write definitions
 def_fields = fieldnames(seq_defs);
 for n_id = 1:numel(def_fields)
@@ -105,11 +103,9 @@ for n_id = 1:numel(def_fields)
 end
 seq.write(seq_filename, author);
 
-%% plot
-saveSaturationPhasePlot(seq_filename);
 warndlg(' This sequence will not run on all scanners with DC limits and can crash the scanner software! Use pulsed sequences instead' )
 %% call standard sim
-M_z = simulate_pulseqcest(seq_filename,'../../sim-library/WM_3T_default_7pool_bmsim.yaml');
+M_z = simulate_pulseqcest(seq_filename,'case_1_2pool_model.yaml');
 figure('Name','Z-asym');
 plotSimulationResults(M_z,offsets_ppm,seq_defs.M0_offset);
 
