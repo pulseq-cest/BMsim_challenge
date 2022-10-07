@@ -1,7 +1,7 @@
-# BMsim challenge - CASE 1
+# BMsim challenge - CASE 3
 
 ## Pool model:
-The pool model of case 1 (and case 3) is similar to the [WM_3T_default_7pool_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml)
+The pool model of case 3 (and case 4) is similar to the [WM_3T_default_7pool_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml)
 model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library). It consists of:
  - 1 water pool
  - 2 CEST pools
@@ -48,10 +48,10 @@ model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-ces
       - k: 20
       - dw: -3
 
-More details and references are given in [case_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
+More details and references are given in [case_3_5pool_model.yaml](/case_3/case_3_5pool_model.yaml)
 
 ## Preparation scheme:
-The preparation scheme for case 1 is identical to the 
+The preparation scheme for case 3 is identical to the 
 [APTw_3T_000_2uT_1block_2s_braintumor](https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/seq-library/APTw_3T_000_2uT_1block_2s_braintumor/)
 scheme published in the published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library).
 
@@ -61,5 +61,5 @@ The preparation settings are:
   - pulse power: 2 µT
   - offset list: -15:0.1:15 ppm
 
-A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of challenge 1](/case_1)
+A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of case 3](/case_3)
   
