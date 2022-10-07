@@ -1,0 +1,59 @@
+####################################################################################
+# ------ Simulation settings for (py)pulseq-cest BlochMcConnell simulations ------ #
+# ------------------------ https://pulseq-cest.github.io/ ------------------------ #
+####################################################################################
+# Simulation parameters for white matter at 3T with
+# - 1 CEST pool 
+# - water pool as in water solution
+#
+# sources/references for settings in this file:
+# https://onlinelibrary.wiley.com/doi/full/10.1002/mrm.28433
+# exchange rate of creatine at 21�C and pH 6.4 = 47 Hz, we use 50 Hz herein
+# in this paper they used 55.5 mM Creatine, which is close to the maximum solubility this would be f= 55.5mM/(2*55.5M)=0.0005
+# this should give around 7% CEST effect
+
+###### Pool settings
+#         f: relative pool size fraction (float)
+#        t1: longitudinal relaxation time T1 = 1/R1 [s] (float)
+#        t2: transversal relaxation time T2 = 1/R2 [s] (float)
+#         k: exchange rate [Hz] to water pool (MT and CEST pools only) (float)
+#        dw: chemical shift (delta omega) relative to water [ppm] (MT and CEST pools only) (float)
+# lineshape: lineshape of the MT Pool ('Lorentzian', 'SuperLorentzian' or 'None') (str)
+
+### water pool
+water_pool: {
+  f: 1.0,
+  t1: 3.0,
+  t2: 2.0
+}
+
+### CEST pool(s)
+cest_pool: {
+  'creatine_gua': {
+    f: 5.0e-04, #55.5e-3 / 111,
+    t1: 1.05,
+    t2: 0.1,
+    k: 50,
+    dw: 1.9
+  }
+}
+
+###### Scanner settings
+#       b0: field strength [T] (float)
+#    gamma: gyromagnetic ratio [rad / uT], default is 267.5153 (float)
+# b0_inhom: field inhomogeneity [ppm], default is 0.0 (float)
+#   rel_b1: relative amp inhomogeneity, default is 1.0 (float)
+b0: 3
+gamma: 267.5154109126009
+b0_inhom: 0.0
+rel_b1: 1
+
+##### Additional simulation settings
+#           verbose: verbose output, default is False (bool)
+#    reset_init_mag: True to reset magnetization after each readout, default is True (bool)
+#             scale: relative magnetization after reset of magnetization, default is 1 (float)
+# max_pulse_samples: maximum number of samples for each shaped rf pulse, default is 500 (int)
+verbose: False
+reset_init_mag: True
+scale: 1
+max_pulse_samples: 300
