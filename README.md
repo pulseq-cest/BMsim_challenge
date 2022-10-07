@@ -22,9 +22,9 @@ Please feel free to add your name / group in case it's not listed yet and post y
   2) post-preparation delay = 6.5 ms, in the pulseq-file this corresponds to the gradient spoiler duration
   3) gyromagnetic ratio: 42.5764 MHz/T
   4) larmor frequency (3T): 127.7292 MHz/T  
-
-### Case 1: 5 pool model, APTw preparation
-  - **pool model**: 5 pool model of WM as defined in [case_1_5pool_model.yaml](/case_1/case_1_5pool_model.yaml)
+  
+### Case 1: 2 pool model, APTw preparation - steady-state
+  - **pool model**: 2 pool model of creatine as defined in [case_1_2pool_model.yaml](/case_1/case_1_2pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 2 s
@@ -34,7 +34,7 @@ Please feel free to add your name / group in case it's not listed yet and post y
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_1/README.md)
 
 ### Case 2: 2 pool model, APTw preparation
-  - **pool model**: 2 pool model of WM as defined in [case_2_2pool_model.yaml](/case_2/case_2_2pool_model.yaml)
+  - **pool model**: 2 pool model of creatine as defined in [case_2_2pool_model.yaml](/case_2/case_2_2pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 2 s
@@ -43,15 +43,25 @@ More details about the pool model and preparation scheme can be found in the cor
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_2/README.md)
 
-### Case 3: 5 pool model, WASABI preparation
+### Case 3: 5 pool model, APTw preparation
   - **pool model**: 5 pool model of WM as defined in [case_3_5pool_model.yaml](/case_3/case_3_5pool_model.yaml)
+  - **prep. details**:
+    - pulse shape: block
+    - pulse duration: 2 s
+    - pulse power: 2 µT
+    - offset list: -15:0.1:15 ppm
+
+More details about the pool model and preparation scheme can be found in the corresponding [README](/case_3/README.md)
+
+### Case 4: 5 pool model, WASABI preparation
+  - **pool model**: 5 pool model of WM as defined in [case_4_5pool_model.yaml](/case_4/case_4_5pool_model.yaml)
   - **prep. details**:
     - pulse shape: block
     - pulse duration: 5 ms
     - pulse power: 3.7 µT
     - offset list: -2:0.05:2 ppm
 
-More details about the pool model and preparation scheme can be found in the corresponding [README](/case_3/README.md)
+More details about the pool model and preparation scheme can be found in the corresponding [README](/case_4/README.md)
 
 ## FAQ
 #### How did you choose the value of the gyromagnetic ratio?
