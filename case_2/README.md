@@ -35,6 +35,7 @@ The preparation settings are:
   - pulse duration: 2 s
   - pulse power: 2 µT
   - offset list: -15:0.1:15 ppm
+  - normalization scan at -300 ppm
 
 A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of challenge 2](/case_2)
   
