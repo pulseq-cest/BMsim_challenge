@@ -22,6 +22,7 @@ Please feel free to add your name / group in case it's not listed yet and post y
   2) post-preparation delay = 6.5 ms, in the pulseq-file this corresponds to the gradient spoiler duration
   3) gyromagnetic ratio: 42.5764 MHz/T
   4) larmor frequency (3T): 127.7292 MHz/T  
+  5) Normalization scan at -300 ppm
   
 ### Case 1: 2 pool model, APTw preparation - steady-state
   - **pool model**: 2 pool model of creatine as defined in [case_1_2pool_model.yaml](/case_1/case_1_2pool_model.yaml)
