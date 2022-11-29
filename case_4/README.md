@@ -59,6 +59,7 @@ The preparation settings are:
   - pulse shape: block
   - pulse duration: 5 ms
   - pulse power: 3.7 µT
+  - post-pulse delay: 6.5 ms (in the seq-file this corresponds to the gradient spoiler duration)
   - offset list: -2:0.05:2 ppm
   - normalization scan at -300 ppm
 
