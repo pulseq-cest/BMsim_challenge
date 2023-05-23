@@ -16,6 +16,9 @@ https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoF
 
 Please feel free to add your name / group in case it's not listed yet and post your results.
 
+## Online evaluation script
+To provide a simple way to compare your own simulation results with (a selection of) the results collected in the [google spreadsheet](https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/), we set up an [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) in form of a iPython Notebook that is hosted on Google colab. 
+
 ## Simulation cases
 ### General settings / assumptions:
   1) fully relaxed initial magnetization (Zi = 1) for every offset,this is equivalent to a very long recovery time 10*T1	
