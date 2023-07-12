@@ -39,5 +39,5 @@ The preparation settings are:
 - pulse power (B1rms): 1.99620497 µT
 - offset list: -15:0.1:15 ppm
 
-A MATLAB and a Python script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of case 5](/case_5)
+A MATLAB and a Python script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of case 6](/case_6)
   

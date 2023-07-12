@@ -8,50 +8,12 @@
 # Patrick Schuenke 2023
 # patrick.schuenke@ptb.de
 
-import copy
 from pathlib import Path
-from types import SimpleNamespace
 
 import numpy as np
 import pypulseq as pp
 from bmctool.utils.pulses.calc_power_equivalents import calc_power_equivalent
 from bmctool.utils.seq.write import write_seq
-from scipy.interpolate import interp1d
-
-
-def resample_pulse(rf: SimpleNamespace, n_sample: int = 200) -> SimpleNamespace:
-    """Resample rf pulse to specified number of piecewise-constant values but original number of total samples.
-
-    Parameters
-    ----------
-    rf : SimpleNamespace
-        PyPulseq RF pulse
-    n_sample : int, optional
-        Number of samples, by default 200
-
-    Returns
-    -------
-    SimpleNamespace
-        Resampled RF pulse
-    """
-    # create copy of rf pulse
-    rf_resampled = copy.deepcopy(rf)
-
-    # get new time vector
-    t = np.linspace(0, rf.t[-1], n_sample)
-
-    # calc temporary signal with 'n_sample' samples
-    _signal = np.interp(t, rf.t, rf.signal)
-
-    # calculate piecewise-constant signal with original number of samples
-    interpolation = interp1d(t, _signal, kind="nearest")
-    _signal = interpolation(rf.t)
-
-    # overwrite with piecewise-constant signal
-    rf_resampled.signal = _signal
-
-    return rf_resampled
-
 
 # get id of generation file
 seqid = Path(__file__).stem + "_py"
@@ -100,10 +62,10 @@ sys = pp.Opts(
 # spoiler
 spoil_amp = 0.8 * sys.max_grad  # Hz/m
 rise_time = 1.0e-3  # spoiler rise time in seconds
-spoil_dur = 6.5e-3  # complete spoiler duration in seconds
+flat_time = 4.5e-3  # spoiler flat time in seconds
 
 gx_spoil, gy_spoil, gz_spoil = [
-    pp.make_trapezoid(channel=c, system=sys, amplitude=spoil_amp, duration=spoil_dur, rise_time=rise_time)
+    pp.make_trapezoid(channel=c, system=sys, amplitude=spoil_amp, flat_time=flat_time, rise_time=rise_time)
     for c in ["x", "y", "z"]
 ]
 
@@ -113,9 +75,7 @@ sat_pulse = pp.make_sinc_pulse(
     flip_angle=flip_angle_sat, duration=defs["tp"], system=sys, time_bw_product=2, apodization=0.15
 )
 
-# overwrite rf pulse with piecewise-constant signal and phase
-sat_pulse = resample_pulse(sat_pulse, n_sample=200)
-
+# calculate b1rms
 defs["b1rms"] = calc_power_equivalent(rf_pulse=sat_pulse, tp=defs["tp"], td=defs["td"], gamma_hz=GAMMA_HZ)
 
 # pseudo ADC event
