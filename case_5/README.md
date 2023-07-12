@@ -26,18 +26,16 @@ More details and references are given in [case_5_2pool_model.yaml](/case_5/case_
 
 ## Preparation scheme
 
-The preparation scheme for case 5 is inspired by [APTw_3T_001_2uT_36SincGauss_DC90_2s_braintumor](https://github.com/kherz/pulseq-cest-library/tree/master/seq-library/APTw_3T_001_2uT_36SincGauss_DC90_2s_braintumor) published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library). It was modified to achieve a total saturation time of roughly 15 instead of 2 seconds.
+The preparation scheme for case 5 consists of a single sinc-pulse, which has exactly the same settings as the sinc-pulses used in case 6 and case 7.
 
 The preparation settings are:
 
 - pulse shape: Gaussian
 - pulse duration: 50 ms
-- number of pulses: 272
-- interpulse delay: 5 ms
-- number of interpulse delays: 271
-- total saturation time: 14.955 s
+- number of pulses: 1
+- total saturation time: 50 ms
 - pulse power (B1rms): 1.99620497 µT
-- offset list: -15:0.1:15 ppm
+- offset list: -5:0.1:5 ppm
 
 A MATLAB and a Python script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of case 5](/case_5)
   

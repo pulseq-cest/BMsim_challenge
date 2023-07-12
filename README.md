@@ -30,22 +30,20 @@ Please feel free to add your name / group in case it's not listed yet and post y
 
 ## Second challenge (cases 5 - 8)
 
-### Case 5: 2 pool model, pulsed APTw preparation - steady-state
+### Case 5: 2 pool model, single shaped pulse
 
 - **pool model**: 2 pool model of creatine as defined in [case_5_2pool_model.yaml](/case_5/case_5_2pool_model.yaml)
 - **prep. details**:
   - pulse shape: Gaussian
   - pulse duration: 50 ms
-  - number of pulses: 272
-  - interpulse delay: 5 ms
-  - number of interpulse delays: 271
-  - total saturation time: 14.955 s
+  - number of pulses: 1
+  - total saturation time: 50 ms
   - pulse power (B1rms): 1.99620497 µT
-  - offset list: -15:0.1:15 ppm
+  - offset list: -2:0.02:2 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_5/README.md)
 
-### Case 6: 6 pool model, pulsed APTw preparation
+### Case 6: 2 pool model, pulsed APTw preparation
 
 - **pool model**: 2 pool model of creatine as defined in [case_6_2pool_model.yaml](/case_6/case_6_2pool_model.yaml)
 - **prep. details**:
