@@ -18,11 +18,15 @@ Google Docs spreadsheet that can be found here:
 
 Please feel free to add your name / group in case it's not listed yet and post your results.
 
-# Simulation cases
+## Online evaluation script
 
-## General settings / assumptions
+To provide a simple way to compare your own simulation results with (a selection of) the results collected in the [google spreadsheet](https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/), we set up an [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) in form of a iPython Notebook that is hosted on Google colab.
 
-  1) fully relaxed initial magnetization (Zi = 1) for every offset,this is equivalent to a very long recovery time 10*T1
+## Simulation cases
+
+### General settings / assumptions
+
+  1) fully relaxed initial magnetization (Zi = 1) for every offset,this is equivalent to a very long recovery time 10*T1 
   2) post-preparation delay = 6.5 ms, in the pulseq-file this corresponds to the gradient spoiler duration
   3) gyromagnetic ratio: 42.5764 MHz/T
   4) larmor frequency (3T): 127.7292 MHz/T  
