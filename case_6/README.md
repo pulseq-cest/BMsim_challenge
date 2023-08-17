@@ -36,7 +36,7 @@ The preparation settings are:
 - interpulse delay: 5 ms
 - number of interpulse delays: 35
 - total saturation time: 1.975 s
-- pulse power (B1rms): 1.99620497 µT
+- pulse power (B1rms): 1.9962 µT
 - offset list: -15:0.1:15 ppm
 
 A MATLAB and a Python script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of case 6](/case_6)
