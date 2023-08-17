@@ -168,10 +168,8 @@ for m, offset in enumerate(offsets_hz):
     for n in range(defs["n_pulses"]):
         sat_pulse.phase_offset = accum_phase % (2 * np.pi)
         seq.add_block(sat_pulse)
-        accum_phase = (
-            accum_phase
-            + offset * 2 * np.pi * np.sum(np.abs(sat_pulse.signal) > 0) * 1e-6
-        ) % (2 * np.pi)
+        _dur = sat_pulse.shape_dur
+        accum_phase = (accum_phase + offset * 2 * np.pi * _dur) % (2 * np.pi)
         if n < defs["n_pulses"] - 1:
             seq.add_block(td_delay)
 

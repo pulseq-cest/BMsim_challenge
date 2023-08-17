@@ -152,9 +152,6 @@ for m, offset in enumerate(offsets_hz):
         f"#{m + 1} / {len(offsets_hz)} : offset {offset / defs['freq']:.2f} ppm ({offset:.3f} Hz)"
     )
 
-    # reset accumulated phase
-    accum_phase = 0
-
     # add delay
     if offset == defs["m0_offset"] * defs["freq"]:
         if defs["trec_m0"] > 0:
@@ -165,15 +162,7 @@ for m, offset in enumerate(offsets_hz):
 
     # set sat_pulse
     sat_pulse.freq_offset = offset
-    for n in range(defs["n_pulses"]):
-        sat_pulse.phase_offset = accum_phase % (2 * np.pi)
-        seq.add_block(sat_pulse)
-        accum_phase = (
-            accum_phase
-            + offset * 2 * np.pi * np.sum(np.abs(sat_pulse.signal) > 0) * 1e-6
-        ) % (2 * np.pi)
-        if n < defs["n_pulses"] - 1:
-            seq.add_block(td_delay)
+    seq.add_block(sat_pulse)
 
     # add spoiler gradients
     seq.add_block(gx_spoil, gy_spoil, gz_spoil)

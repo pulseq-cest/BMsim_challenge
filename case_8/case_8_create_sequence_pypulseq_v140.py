@@ -60,7 +60,7 @@ sys = pp.Opts(
     slew_unit="T/m/s",
     rf_ringdown_time=0,
     rf_dead_time=0,
-    rf_raster_time=250e-6,  # rf raster time = 250 µs for PyPulseq v1.4
+    rf_raster_time=1e-6,
     gamma=GAMMA_HZ * 1e6,
 )
 
@@ -136,10 +136,8 @@ for m, offset in enumerate(offsets_hz):
     for n in range(defs["n_pulses"]):
         sat_pulse.phase_offset = accum_phase % (2 * np.pi)
         seq.add_block(sat_pulse)
-        accum_phase = (
-            accum_phase
-            + offset * 2 * np.pi * np.sum(np.abs(sat_pulse.signal) > 0) * 1e-6
-        ) % (2 * np.pi)
+        _dur = sat_pulse.shape_dur
+        accum_phase = (accum_phase + offset * 2 * np.pi * _dur) % (2 * np.pi)
         if n < defs["n_pulses"] - 1:
             seq.add_block(td_delay)
 
@@ -156,4 +154,3 @@ write_seq(
     author="https://github.com/pulseq-cest/BMsim_challenge",
     use_matlab_names=True,
 )
-print("here")
