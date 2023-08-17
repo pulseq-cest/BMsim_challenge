@@ -38,7 +38,7 @@ Please feel free to add your name / group in case it's not listed yet and post y
   - pulse duration: 50 ms
   - number of pulses: 1
   - total saturation time: 50 ms
-  - pulse power (B1rms): 1.99620497 µT
+  - pulse power (B1rms): 1.9962 µT
   - offset list: -2:0.02:2 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_5/README.md)
@@ -53,7 +53,7 @@ More details about the pool model and preparation scheme can be found in the cor
   - interpulse delay: 5 ms
   - number of interpulse delays: 35
   - total saturation time: 1.975 s
-  - pulse power (B1rms): 1.99620497 µT
+  - pulse power (B1rms): 1.9962 µT
   - offset list: -15:0.1:15 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_6/README.md)
@@ -68,7 +68,7 @@ More details about the pool model and preparation scheme can be found in the cor
   - interpulse delay: 5 ms
   - number of interpulse delays: 35
   - total saturation time: 1.975 s
-  - pulse power (B1rms): 1.99620497 µT
+  - pulse power (B1rms): 1.9962 µT
   - offset list: -15:0.1:15 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_7/README.md)
@@ -83,7 +83,7 @@ More details about the pool model and preparation scheme can be found in the cor
   - interpulse delay: 100 µs
   - number of interpulse delays: 1
   - total saturation time: 0.0101 s
-  - pulse power: 3.7 µT
+  - pulse power (peak): 3.7 µT
   - offset list: -2:0.05:2 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_8/README.md)
