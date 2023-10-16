@@ -1,38 +1,38 @@
 # == BMsim challenge ==
 
-Welcome to the repository of the Bloch-McConnell simulation (BMsim) challenge.
-The idea of the challenge can be summarized as follows:
+Welcome to the repository of the Bloch-McConnell simulation (BMsim) study / challenge.
+The idea of the project can be summarized as follows:
 
-  1) Every participant simulates the different well-defined cases / scenarios
-  2) The simulation results from all participants are collected
-  3) The median Z-spectrum wins
+  1) Every participant simulates different well-defined cases / scenarios
+  2) The simulation results from all participants are [collected online](https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/)
+  3) An [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) enables a live comparison and validation against all other results
 
-In this first challenge, we have chosen 3 different preparation schemes consisting of single block pulses / CW pulses only. Next challenges might cover more sophisticated cases using arbitrary shaped RF pulses as well.
+In the first study, we have chosen 3 different preparation schemes consisting of single block/CW pulses and 2 different pool systems resultung in 4 different simulation cases (cases 1 - 4). More infos and a summary of our findings and achievements can be found in the [abstract](ISMRM_Abstract_BMsim.pdf) and [slides](ISMRM_slides.pdf) from the ISMRM 2023.
+
+The second study (cases 5 - 8) covers more complex cases including shaped pulses and pulse trains. An abstract submission for the ISMRM 2024 is planned.
 
 ## Simulation results
 
-To keep the burden for posting your simulation results as low as possible, we decided to collect the results in a simple
-Google Docs spreadsheet that can be found here:
-
-<https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/>
+To keep the burden for submitting your simulation results as low as possible, we decided to collect the results in a simple
+[Google Docs spreadsheet](https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/).
 
 Please feel free to add your name / group in case it's not listed yet and post your results.
 
 ## Online evaluation script
 
-To provide a simple way to compare your own simulation results with (a selection of) the results collected in the [google spreadsheet](https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/), we set up an [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) in form of a iPython Notebook that is hosted on Google colab.
+To provide a simple way to compare your own simulation results with (a selection of) the results collected in the Google Docs spreadsheet, we set up an [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) in form of a iPython Notebook that is hosted on Google colab.
 
 ## Simulation cases
 
 ### General settings / assumptions
 
-  1) fully relaxed initial magnetization (Zi = 1) for every offset,this is equivalent to a very long recovery time 10*T1 
-  2) post-preparation delay = 6.5 ms, in the pulseq-file this corresponds to the gradient spoiler duration
-  3) gyromagnetic ratio: 42.5764 MHz/T
+  1) fully relaxed initial magnetization (Zi = 1) for every offset (this is equivalent to a very long recovery time t > 10 * T1)
+  2) post-preparation delay = 6.5 ms (in the pulseq-file this corresponds to the gradient spoiler duration)
+  3) gyromagnetic ratio: 42.5764 MHz/T (see FAQ below)
   4) larmor frequency (3T): 127.7292 MHz/T  
   5) Normalization scan at -300 ppm
 
-## Second challenge (cases 5 - 8)
+## Second study (cases 5 - 8)
 
 ### Case 5: 2 pool model, single shaped pulse
 
@@ -92,7 +92,7 @@ More details about the pool model and preparation scheme can be found in the cor
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_8/README.md)
 
-## First challenge (cases 1 - 4)
+## First study (cases 1 - 4)
 
 ### Case 1: 2 pool model, APTw preparation - steady-state
 
@@ -157,10 +157,10 @@ More details about the pool model and preparation scheme can be found in the cor
   1) define water f=1, and all other fractions relative to water
   2) define M0_i of each pool i and then normalize f_i= M0_i/sum(M0_i)
 
-  The first challenge showed that all groups participating so far use definition 1. Therefore, we encourage all new participants to use this definition as well.
+  The first study showed that all groups participating so far use definition 1. Therefore, we encourage all new participants to use this definition as well.
 
 - How do you define the MT pool?
 
   Some simulations use x, y, and z components to describe a Lorentzian MT pool.
   Others use only the z-component and assume a Lorentzian lineshape factor there.
-  The results from the first challenge showed that these different implementations are **NOT INTERCHANGEABE** right now. Therefore, we suggest treating the MT pool similar to a CEST pool and consider all 3 components.
+  The results from the first study showed that these different implementations are **NOT INTERCHANGEABE** right now. Therefore, we suggest treating the MT pool similar to a CEST pool and consider all 3 components.
