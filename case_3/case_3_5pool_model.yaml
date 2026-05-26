@@ -2,12 +2,13 @@
 # ------ Simulation settings for (py)pulseq-cest BlochMcConnell simulations ------ #
 # ------------------------ https://pulseq-cest.github.io/ ------------------------ #
 ####################################################################################
-# Simulation parameters for white matter at 3T 
-# This file is inspired by WM_001, but all numbers are made simpler to form a easy to share default model
+# Simulation parameters for a simplified white-matter-like 5-pool model at 3T
+# Inspired by WM_001; numbers are simplified for an easy-to-share default model
 #
-# - 4 CEST pools
-# - 1 NOE pool      
-# - a Lorentzian shaped MT pool (with adjusted R2x by a factor 0.23, this makes the pool shiftable
+# - 1 water pool
+# - 2 CEST pools (amide, guanidine)
+# - 1 NOE pool
+# - 1 Lorentzian MT pool (R2 adjusted by a factor 0.23 for a shiftable lineshape)
 #
 # sources/references for settings in this file:
 # CEST pools: https://doi.org/10.1016/j.neuroimage.2017.04.045

@@ -2,13 +2,13 @@
 # ------ Simulation settings for (py)pulseq-cest BlochMcConnell simulations ------ #
 # ------------------------ https://pulseq-cest.github.io/ ------------------------ #
 ####################################################################################
-# Simulation parameters for white matter at 3T with
-# - 1 CEST pool 
-# - water pool as in water solution
+# Simulation parameters for a creatine phantom at 3T with
+# - 1 water pool
+# - 1 CEST pool (creatine / guanidine)
 #
 # sources/references for settings in this file:
 # https://onlinelibrary.wiley.com/doi/full/10.1002/mrm.28433
-# exchange rate of creatine at 21�C and pH 6.4 = 47 Hz, we use 50 Hz herein
+# exchange rate of creatine at 21 deg C and pH 6.4 = 47 Hz, we use 50 Hz herein
 # in this paper they used 55.5 mM Creatine, which is close to the maximum solubility this would be f= 55.5mM/(2*55.5M)=0.0005
 # this should give around 7% CEST effect
 

@@ -2,7 +2,7 @@
 # ------ Simulation settings for (py)pulseq-cest BlochMcConnell simulations ------ #
 # ------------------------ https://pulseq-cest.github.io/ ------------------------ #
 ####################################################################################
-# Simulation parameters for white matter at 3T with
+# Simulation parameters for a creatine phantom at 3T with
 # - 1 CEST pool 
 # - water pool as in water solution
 #
