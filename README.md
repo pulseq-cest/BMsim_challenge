@@ -7,9 +7,11 @@ The idea of the project can be summarized as follows:
   2) The simulation results from all participants are [collected online](https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/)
   3) An [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) enables a live comparison and validation against all other results
 
-In the first study, we have chosen 3 different preparation schemes consisting of single block/CW pulses and 2 different pool systems resultung in 4 different simulation cases (cases 1 - 4). More infos and a summary of our findings and achievements can be found in the [abstract](ISMRM_Abstract_BMsim.pdf) and [slides](ISMRM_slides.pdf) from the ISMRM 2023.
+In the first study (cases 1-4), we compared four preparation schemes, long and short block/CW saturation plus WASABI, on two pool systems (2-pool creatine and 5-pool white matter). Further information and a summary of findings from the first round can be found in the [abstract](ISMRM_Abstract_BMsim.pdf) and [slides](ISMRM_slides.pdf) from ISMRM 2023.
 
-The second study (cases 5 - 8) covers more complex cases including shaped pulses and pulse trains. An abstract submission for the ISMRM 2024 is planned.
+The second study (cases 5-8) covers more complex cases including shaped Gaussian pulses and pulse trains.
+
+A manuscript submission to MRM is planned.
 
 ## Simulation results
 
@@ -20,7 +22,7 @@ Please feel free to add your name / group in case it's not listed yet and post y
 
 ## Online evaluation script
 
-To provide a simple way to compare your own simulation results with (a selection of) the results collected in the Google Docs spreadsheet, we set up an [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) in form of a iPython Notebook that is hosted on Google colab.
+To provide a simple way to compare your own simulation results with (a selection of) the results collected in the Google Docs spreadsheet, we set up an [online evaluation script](https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7) as an IPython notebook hosted on Google Colab.
 
 ## Simulation cases
 
