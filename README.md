@@ -26,7 +26,7 @@ To provide a simple way to compare your own simulation results with (a selection
 
 ### General settings / assumptions
 
-  1) fully relaxed initial magnetization (Zi = 1) for every offset (this is equivalent to a very long recovery time t > 10 * T1)
+  1) fully relaxed initial magnetization (Zi = 1) before each offset. Equivalently, use Trec > 10 * T1 of the slowest pool (for the 2-pool creatine model with water T1 = 3 s, this means Trec >~ 30 s). All pool-model YAML files set `reset_init_mag: True` for this. **Do not** use the shorter Trec values in the reference Pulseq seq files (3.5 s for most cases, 3 s for case 4 and 8): those delays are for scanner timing only and are not part of the simulation specification.
   2) post-preparation delay = 6.5 ms (in the pulseq-file this corresponds to the gradient spoiler duration)
   3) gyromagnetic ratio: 42.5764 MHz/T (see FAQ below)
   4) larmor frequency (3T): 127.7292 MHz
@@ -139,6 +139,10 @@ More details about the pool model and preparation scheme can be found in the cor
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_4/README.md)
 
 ## FAQ
+
+- Should I use the Trec delay from the Pulseq seq files between offsets?
+
+  **No.** For Bloch-McConnell simulations you must start each offset from fully relaxed magnetization (Zi = 1), either by setting `reset_init_mag: True` in the YAML or by using Trec > 10 * T1. The Trec entries in the reference seq files (typically 3.5 s) are not long enough for full recovery and are included only for compatibility with scanner sequence export.
 
 - How did you choose the value of the gyromagnetic ratio?
 
