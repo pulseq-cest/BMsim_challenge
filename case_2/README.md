@@ -38,5 +38,5 @@ The preparation settings are:
   - offset list: -15:0.1:15 ppm
   - normalization scan at -300 ppm
 
-A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of challenge 2](/case_2)
+A MATLAB script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [case 2 subfolder](/case_2)
   
