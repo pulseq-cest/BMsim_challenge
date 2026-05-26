@@ -1,7 +1,7 @@
 # BMsim challenge - CASE 2
 
 ## Pool model:
-The pool model of case 2 is identical to the [z_phantom_creatine_3T_pH6.4_T22C_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml)
+The pool model of case 2 is identical to the [z_phantom_creatine_3T_pH6.4_T22C_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/z_phantom_creatine_3T_pH6.4_T22C_bmsim.yaml)
 model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library). It consists of:
  - 1 water pool
  - 1 CEST pool
@@ -28,7 +28,7 @@ More details and references are given in [case_2_2pool_model.yaml](/case_2/case_
 ## Preparation scheme:
 The preparation scheme for case 2 is identical to the 
 [APTw_3T_000_2uT_1block_2s_braintumor](https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/seq-library/APTw_3T_000_2uT_1block_2s_braintumor/)
-scheme published in the published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library).
+scheme published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library).
 
 The preparation settings are:
   - pulse shape: block

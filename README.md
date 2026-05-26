@@ -29,7 +29,7 @@ To provide a simple way to compare your own simulation results with (a selection
   1) fully relaxed initial magnetization (Zi = 1) for every offset (this is equivalent to a very long recovery time t > 10 * T1)
   2) post-preparation delay = 6.5 ms (in the pulseq-file this corresponds to the gradient spoiler duration)
   3) gyromagnetic ratio: 42.5764 MHz/T (see FAQ below)
-  4) larmor frequency (3T): 127.7292 MHz/T  
+  4) larmor frequency (3T): 127.7292 MHz
   5) Normalization scan at -300 ppm
 
 ## Second study (cases 5 - 8)
@@ -133,7 +133,7 @@ More details about the pool model and preparation scheme can be found in the cor
 - **prep. details**:
   - pulse shape: block
   - pulse duration: 5 ms
-  - pulse power: 3.7 µT
+  - pulse power (B1peak): 3.7 µT
   - offset list: -2:0.05:2 ppm
 
 More details about the pool model and preparation scheme can be found in the corresponding [README](/case_4/README.md)

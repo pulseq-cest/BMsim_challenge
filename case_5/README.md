@@ -2,7 +2,7 @@
 
 ## Pool model
 
-The pool model of case 5 is identical to the [z_phantom_creatine_3T_pH6.4_T22C_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml)
+The pool model of case 5 is identical to the [z_phantom_creatine_3T_pH6.4_T22C_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/z_phantom_creatine_3T_pH6.4_T22C_bmsim.yaml)
 model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library). It consists of:
 
 - 1 water pool
@@ -26,7 +26,7 @@ More details and references are given in [case_5_2pool_model.yaml](/case_5/case_
 
 ## Preparation scheme
 
-The preparation scheme for case 5 consists of a single sinc-pulse, which has exactly the same settings as the sinc-pulses used in case 6 and case 7.
+The preparation scheme for case 5 consists of a single Gaussian pulse, which has exactly the same settings as the Gaussian pulses used in case 6 and case 7.
 
 The preparation settings are:
 

@@ -2,7 +2,7 @@
 
 ## Pool model
 
-The pool model of case 6 is identical to the [z_phantom_creatine_3T_pH6.4_T22C_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/WM_3T_default_7pool_bmsim.yaml)
+The pool model of case 6 is identical to the [z_phantom_creatine_3T_pH6.4_T22C_bmsim](https://github.com/kherz/pulseq-cest-library/blob/6ffca73282badd2828b86ace383969e9b4276e80/sim-library/z_phantom_creatine_3T_pH6.4_T22C_bmsim.yaml)
 model published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library). It consists of:
 
 - 1 water pool

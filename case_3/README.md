@@ -53,7 +53,7 @@ More details and references are given in [case_3_5pool_model.yaml](/case_3/case_
 ## Preparation scheme:
 The preparation scheme for case 3 is identical to the 
 [APTw_3T_000_2uT_1block_2s_braintumor](https://github.com/kherz/pulseq-cest-library/blob/22009a462a689e10f407374efc0d63760344519b/seq-library/APTw_3T_000_2uT_1block_2s_braintumor/)
-scheme published in the published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library).
+scheme published in the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library).
 
 The preparation settings are:
   - pulse shape: block
