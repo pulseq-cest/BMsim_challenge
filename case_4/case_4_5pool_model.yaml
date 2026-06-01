@@ -8,7 +8,7 @@
 # - 1 water pool
 # - 2 CEST pools (amide, guanidine)
 # - 1 NOE pool
-# - 1 Lorentzian MT pool (R2 adjusted by a factor 0.23 for a shiftable lineshape)
+# - 1 MT pool represented as an additional CEST-like pool
 #
 # sources/references for settings in this file:
 # CEST pools: https://doi.org/10.1016/j.neuroimage.2017.04.045
@@ -19,23 +19,12 @@
 #        t2: transversal relaxation time T2 = 1/R2 [s] (float)
 #         k: exchange rate [Hz] to water pool (MT and CEST pools only) (float)
 #        dw: chemical shift (delta omega) relative to water [ppm] (MT and CEST pools only) (float)
-# lineshape: lineshape of the MT Pool ('Lorentzian', 'SuperLorentzian' or 'None') (str)
 
 ### water pool   # as in WM_3T_001
 water_pool: {
   f: 1.0,
   t1: 1.0,
   t2: 0.040
-}
-
-### MT pool  pectra
-mt_pool: {
-  f:  0.1351, #15 / 111,
-  t1: 1.0,
-  t2: 4.0e-05 ,  # adjusted to have similar shape to SuperLorentzian
-  k:  30,
-  dw: -3.0,  # leads to most simlar asym at 15 ppm of - 3%
-  lineshape: 'Lorentzian'
 }
 
 cest_pool: {  
@@ -59,6 +48,13 @@ cest_pool: {
     t2: 0.005,
     k: 20,
     dw: -3
+  },
+  'MT': {
+    f: 0.1351, #15 / 111,
+    t1: 1.0,
+    t2: 4.0e-05,
+    k: 30,
+    dw: -3.0
   }
 }
 
