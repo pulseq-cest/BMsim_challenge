@@ -1716,6 +1716,33 @@ def plot_bart_precision_comparison(
     )
 
 
+def generate_bart_precision_figures(
+    cases: dict[int, CaseData],
+    figures_dir: Path | None = None,
+    *,
+    reference_label: str = REFERENCE_SUBMISSION_LABEL,
+) -> list[Path]:
+    """Write BART single- vs double-precision panels for all case pairs."""
+    out = figures_dir or FIGURES_DIR
+    pairs = [
+        ([1, 2], "Figure_BART_precision_12.png"),
+        ([3, 4], "Figure_BART_precision_34.png"),
+        ([5, 6], "Figure_BART_precision_56.png"),
+        ([7, 8], "Figure_BART_precision_78.png"),
+    ]
+    paths: list[Path] = []
+    for case_numbers, filename in pairs:
+        paths.append(
+            plot_bart_precision_comparison(
+                cases,
+                out / filename,
+                case_numbers=case_numbers,
+                reference_label=reference_label,
+            )
+        )
+    return paths
+
+
 def generate_paper_figures(
     cases: dict[int, CaseData],
     figures_dir: Path | None = None,
@@ -1778,10 +1805,10 @@ def generate_paper_figures(
                 exclude_zmt=exclude_zmt,
             )
         )
-        paths.append(
-            plot_bart_precision_comparison(
+        paths.extend(
+            generate_bart_precision_figures(
                 cases,
-                out / "Case_BART_precision.png",
+                out,
             )
         )
 
