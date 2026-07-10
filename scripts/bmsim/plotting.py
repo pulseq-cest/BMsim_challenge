@@ -8,7 +8,6 @@ import re
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 from bmsim.filters import filter_submissions
 from bmsim.mtrasym import compute_mtrasym
@@ -20,7 +19,6 @@ REFERENCE_SUBMISSION_LABEL = "S02"
 
 PLOT_FONT_SIZE = 12
 PLOT_FONT_SIZE_LARGE = 17
-PLOT_FONT_SIZE_OVERVIEW = 14
 PLOT_LEGEND_FONT_SIZE = 11
 PLOT_SUBPLOT_TITLE_FONT_SIZE = 12
 PLOT_SUPTITLE_FONT_SIZE = 14
@@ -1073,323 +1071,6 @@ def plot_reference_overview(
     return output_path
 
 
-def plot_difference_overview(
-    cases: dict[int, CaseData],
-    output_path: Path,
-    *,
-    exclude_zmt: bool = True,
-    reference_label: str = REFERENCE_SUBMISSION_LABEL,
-    asym_cutoff: float = 15.0,
-) -> Path:
-    """Overview-style plot with spectra and differences to a reference.
-
-    Columns are Z, MTR_asym, Z_ref - Z, and MTR_asym,ref - MTR_asym.
-    """
-    case_list = [cases[n] for n in sorted(cases)]
-    with _plot_style(font_size=PLOT_FONT_SIZE_OVERVIEW):
-        fig, axes = plt.subplots(
-            nrows=len(case_list),
-            ncols=4,
-            figsize=(18, 20),
-            dpi=300,
-            squeeze=False,
-        )
-
-        for row, case in enumerate(case_list):
-            names_all = case.participant_names
-            keep = filter_submissions(names_all, exclude_zmt=exclude_zmt)
-            names = _labeled_submission_names([names_all[i] for i in keep])
-            if not names:
-                continue
-
-            ref_name = _reference_submission_name(names, reference_label=reference_label)
-            ref_offsets, ref_z, ref_asym_ppm, ref_mtrasym = _spectra_for_participant(
-                case, ref_name, normalize=False
-            )
-            ref_z_mask = _display_offset_mask(ref_offsets) & np.isfinite(ref_z)
-            ref_asym_mask = (
-                np.isfinite(ref_asym_ppm)
-                & np.isfinite(ref_mtrasym)
-                & (ref_asym_ppm > 0)
-                & (ref_asym_ppm <= asym_cutoff)
-            )
-
-            for name in names:
-                color = _submission_color(name)
-                linestyle = _submission_linestyle(name)
-                offsets, z, asym_ppm, mtrasym = _spectra_for_participant(
-                    case, name, normalize=False
-                )
-
-                finite_z = _display_offset_mask(offsets) & np.isfinite(z)
-                axes[row, 0].plot(
-                    offsets[finite_z],
-                    z[finite_z],
-                    color=color,
-                    linestyle=linestyle,
-                    linewidth=PLOT_LINE_WIDTH,
-                    alpha=0.8,
-                )
-
-                asym_mask = (
-                    np.isfinite(asym_ppm)
-                    & np.isfinite(mtrasym)
-                    & (asym_ppm > 0)
-                    & (asym_ppm <= asym_cutoff)
-                )
-                axes[row, 1].plot(
-                    asym_ppm[asym_mask],
-                    mtrasym[asym_mask],
-                    color=color,
-                    linestyle=linestyle,
-                    linewidth=PLOT_LINE_WIDTH,
-                    alpha=0.8,
-                )
-
-                if np.count_nonzero(ref_z_mask) > 1 and np.count_nonzero(finite_z) > 1:
-                    ref_interp = np.interp(
-                        offsets[finite_z],
-                        ref_offsets[ref_z_mask],
-                        ref_z[ref_z_mask],
-                    )
-                    axes[row, 2].plot(
-                        offsets[finite_z],
-                        ref_interp - z[finite_z],
-                        color=color,
-                        linestyle=linestyle,
-                        linewidth=PLOT_LINE_WIDTH,
-                        alpha=0.8,
-                    )
-
-                if (
-                    np.count_nonzero(ref_asym_mask) > 1
-                    and np.count_nonzero(asym_mask) > 1
-                ):
-                    ref_mtr_interp = np.interp(
-                        asym_ppm[asym_mask],
-                        ref_asym_ppm[ref_asym_mask],
-                        ref_mtrasym[ref_asym_mask],
-                    )
-                    axes[row, 3].plot(
-                        asym_ppm[asym_mask],
-                        ref_mtr_interp - mtrasym[asym_mask],
-                        color=color,
-                        linestyle=linestyle,
-                        linewidth=PLOT_LINE_WIDTH,
-                        alpha=0.8,
-                    )
-
-            for col in (0, 2):
-                axes[row, col].invert_xaxis()
-            for col in (1, 3):
-                axes[row, col].invert_xaxis()
-
-            axes[row, 0].set_ylabel(r"Z($\Delta\omega$)")
-            axes[row, 1].set_ylabel(r"MTR$_{asym}$")
-            axes[row, 2].set_ylabel(rf"Z$_{{{reference_label}}}$ - Z")
-            axes[row, 3].set_ylabel(rf"MTR$_{{asym,{reference_label}}}$ - MTR$_{{asym}}$")
-
-            axes[row, 0].set_title(f"Case {case.case_number}")
-            axes[row, 1].set_title(f"Case {case.case_number}")
-            axes[row, 2].set_title(f"Case {case.case_number}")
-            axes[row, 3].set_title(f"Case {case.case_number}")
-
-            if row == len(case_list) - 1:
-                for col in range(4):
-                    axes[row, col].set_xlabel(r"$\Delta\omega$ [ppm]")
-
-            for col in range(4):
-                axes[row, col].grid(True, alpha=0.2)
-
-        fig.tight_layout()
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(output_path, dpi=200, bbox_inches="tight")
-        if output_path.suffix.lower() != ".pdf":
-            fig.savefig(output_path.with_suffix(".pdf"), dpi=300, bbox_inches="tight")
-        plt.close(fig)
-    return output_path
-
-
-def plot_max_spread_summary(
-    cases: dict[int, CaseData],
-    output_path: Path,
-    *,
-    exclude_zmt: bool = True,
-) -> Path:
-    """Bar chart: max |ΔZ| between any pair of submissions per case."""
-    case_nums = []
-    max_spread = []
-
-    for num in sorted(cases):
-        case = cases[num]
-        keep = filter_submissions(case.participant_names, exclude_zmt=exclude_zmt)
-        names = _labeled_submission_names([case.participant_names[i] for i in keep])
-        if len(names) < 2:
-            continue
-
-        z_values = []
-        for name in names:
-            offsets, z, _, _ = _spectra_for_participant(case, name)
-            z_values.append(z)
-
-        display_mask = _display_offset_mask(case.offsets_ppm)
-        stack = np.vstack([z[display_mask] for z in z_values])
-        spread = np.nanmax(stack, axis=0) - np.nanmin(stack, axis=0)
-        case_nums.append(num)
-        max_spread.append(float(np.nanmax(spread)))
-
-    with _plot_style():
-        fig, ax = plt.subplots(figsize=(8, 4))
-        ax.bar([f"Case {n}" for n in case_nums], max_spread, color="steelblue")
-        ax.set_ylabel(r"max$_\omega$ ($Z_{\max}-Z_{\min}$)")
-        ax.set_title("Peak spread between submissions (Z)")
-        ax.grid(True, axis="y", alpha=0.3)
-        fig.tight_layout()
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(output_path, dpi=150, bbox_inches="tight")
-        plt.close(fig)
-    return output_path
-
-
-def _submission_abs_diff_to_reference(
-    case: CaseData,
-    names: list[str],
-    *,
-    reference_label: str = REFERENCE_SUBMISSION_LABEL,
-    asym_cutoff: float = 15.0,
-) -> dict[str, tuple[float, float]]:
-    """Per-submission mean absolute difference to the reference."""
-    ref_name = _reference_submission_name(names, reference_label=reference_label)
-    ref_offsets, ref_z, ref_asym_ppm, ref_mtrasym = _spectra_for_participant(
-        case, ref_name
-    )
-    ref_z_mask = _display_offset_mask(ref_offsets) & np.isfinite(ref_z)
-    ref_asym_mask = (
-        np.isfinite(ref_asym_ppm)
-        & np.isfinite(ref_mtrasym)
-        & (ref_asym_ppm > 0)
-        & (ref_asym_ppm <= asym_cutoff)
-    )
-
-    results: dict[str, tuple[float, float]] = {}
-    for name in names:
-        label = display_submission_label(name)
-        if name == ref_name:
-            results[label] = (0.0, 0.0)
-            continue
-
-        offsets, z, asym_ppm, mtrasym = _spectra_for_participant(case, name)
-        finite_z = _display_offset_mask(offsets) & np.isfinite(z)
-        z_mad = float("nan")
-        if np.count_nonzero(ref_z_mask) > 1 and np.count_nonzero(finite_z) > 1:
-            ref_interp = np.interp(
-                offsets[finite_z],
-                ref_offsets[ref_z_mask],
-                ref_z[ref_z_mask],
-            )
-            z_mad = float(np.nanmean(np.abs(ref_interp - z[finite_z])))
-
-        asym_mask = (
-            np.isfinite(asym_ppm)
-            & np.isfinite(mtrasym)
-            & (asym_ppm > 0)
-            & (asym_ppm <= asym_cutoff)
-        )
-        mtr_mad = float("nan")
-        if np.count_nonzero(ref_asym_mask) > 1 and np.count_nonzero(asym_mask) > 1:
-            ref_mtr_interp = np.interp(
-                asym_ppm[asym_mask],
-                ref_asym_ppm[ref_asym_mask],
-                ref_mtrasym[ref_asym_mask],
-            )
-            mtr_mad = float(
-                np.nanmean(np.abs(ref_mtr_interp - mtrasym[asym_mask]))
-            )
-        results[label] = (z_mad, mtr_mad)
-    return results
-
-
-def plot_mean_abs_diff_summary(
-    cases: dict[int, CaseData],
-    output_path: Path,
-    *,
-    exclude_zmt: bool = True,
-    reference_label: str = REFERENCE_SUBMISSION_LABEL,
-    asym_cutoff: float = 15.0,
-) -> Path:
-    """Scatter plot: one point per submission showing mean |difference| to the reference."""
-    case_nums = sorted(cases)
-    legend_handles: dict[str, object] = {}
-
-    with _plot_style():
-        fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharex=True)
-        ylabels = (
-            rf"mean |$Z_{{\mathrm{{ref}}}} - Z$|",
-            rf"mean |MTR$_{{\mathrm{{asym,ref}}}}$ - MTR$_{{\mathrm{{asym}}}}$|",
-        )
-
-        for num in case_nums:
-            case = cases[num]
-            keep = filter_submissions(case.participant_names, exclude_zmt=exclude_zmt)
-            names = _labeled_submission_names([case.participant_names[i] for i in keep])
-            if len(names) < 2:
-                continue
-
-            per_submission = _submission_abs_diff_to_reference(
-                case,
-                names,
-                reference_label=reference_label,
-                asym_cutoff=asym_cutoff,
-            )
-            ordered = sorted(
-                per_submission.items(), key=lambda item: _submission_sort_key(item[0])
-            )
-            for label, (z_mad, mtr_mad) in ordered:
-                x = num
-                color = _submission_color(label)
-                for ax, value in zip(axes, (z_mad, mtr_mad)):
-                    point = ax.scatter(
-                        x,
-                        value,
-                        color=color,
-                        s=50,
-                        edgecolors="0.2",
-                        linewidths=0.5,
-                        zorder=3,
-                    )
-                    if label not in legend_handles:
-                        legend_handles[label] = point
-
-        for ax, ylabel in zip(axes, ylabels):
-            ax.set_ylabel(ylabel)
-            ax.set_xticks(case_nums)
-            ax.set_xticklabels([f"Case {n}" for n in case_nums])
-            ax.set_xlim(0.4, len(case_nums) + 0.6)
-            ax.grid(True, axis="y", alpha=0.3)
-
-        axes[0].set_title(rf"Differences to {reference_label} by submission")
-        axes[1].set_xlabel("Case")
-        legend_labels, legend_items = zip(
-            *sorted(legend_handles.items(), key=lambda item: _submission_sort_key(item[0]))
-        )
-        fig.legend(
-            legend_items,
-            legend_labels,
-            loc="lower center",
-            bbox_to_anchor=(0.5, 0.02),
-            ncol=5,
-            fontsize=PLOT_LEGEND_FONT_SIZE,
-            frameon=False,
-        )
-        fig.tight_layout(rect=[0, 0.14, 1, 1])
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(output_path, dpi=200, bbox_inches="tight")
-        if output_path.suffix.lower() != ".pdf":
-            fig.savefig(output_path.with_suffix(".pdf"), dpi=300, bbox_inches="tight")
-        plt.close(fig)
-    return output_path
-
-
 def _format_timestep_label(dt_s: float) -> str:
     """Return a legend-friendly timestep label in microseconds."""
     dt_us = dt_s * 1e6
@@ -1430,25 +1111,19 @@ def load_timestep_mat(mat_path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarra
     return offsets, timesteps, spectra
 
 
-def plot_case_timestep_comparison(
-    output_path: Path,
+def _draw_timestep_column(
+    axes: np.ndarray,
+    col: int,
     mat_path: Path,
     *,
     case_number: int = 7,
     pool_model: str = "WM 5 pool",
     reference_index: int = -1,
-) -> Path:
-    """Plot Z/MTR_asym spectra for multiple S03 timesteps in case-panel style."""
+) -> tuple[list, list]:
+    """Draw S03 timestep comparison panels into one column of a subplot grid."""
     offsets, timesteps, spectra = load_timestep_mat(mat_path)
     labels = [_format_timestep_label(dt) for dt in timesteps]
     ref_label = labels[reference_index]
-
-    row_titles = [
-        r"$Z$-spectrum",
-        r"MTR$_{\mathrm{asym}}$",
-        rf"$\Delta Z$ vs {ref_label}",
-        rf"$\Delta$MTR$_{{\mathrm{{asym}}}}$ vs {ref_label}",
-    ]
 
     ref_z = spectra[reference_index]
     ref_asym_ppm, ref_mtrasym = compute_mtrasym(offsets, ref_z)
@@ -1459,161 +1134,125 @@ def plot_case_timestep_comparison(
     dz_ylim_values: list[float] = []
     dmtr_ylim_values: list[float] = []
 
-    with _plot_style():
-        fig, axes = plt.subplots(4, 1, figsize=(5.5, 11), squeeze=False)
+    for index, (dt, z, label) in enumerate(zip(timesteps, spectra, labels)):
+        color = plt.get_cmap("tab10")(index % 10)
+        linestyle = _line_style(index)
+        asym_ppm, mtrasym = compute_mtrasym(offsets, z)
+        finite_z = _display_offset_mask(offsets) & np.isfinite(z)
+        use_for_ylim = not np.isclose(dt, coarse_dt, rtol=0, atol=0)
 
-        for index, (dt, z, label) in enumerate(zip(timesteps, spectra, labels)):
-            color = plt.get_cmap("tab10")(index % 10)
-            linestyle = _line_style(index)
-            asym_ppm, mtrasym = compute_mtrasym(offsets, z)
-            finite_z = _display_offset_mask(offsets) & np.isfinite(z)
-            use_for_ylim = not np.isclose(dt, coarse_dt, rtol=0, atol=0)
+        axes[0, col].plot(
+            offsets[finite_z],
+            z[finite_z],
+            color=color,
+            linestyle=linestyle,
+            alpha=0.85,
+            linewidth=PLOT_LINE_WIDTH,
+            label=label,
+        )
 
-            axes[0, 0].plot(
-                offsets[finite_z],
-                z[finite_z],
+        if asym_ppm.size:
+            finite_mtr = np.isfinite(asym_ppm) & np.isfinite(mtrasym)
+            axes[1, col].plot(
+                asym_ppm[finite_mtr],
+                mtrasym[finite_mtr],
                 color=color,
                 linestyle=linestyle,
                 alpha=0.85,
                 linewidth=PLOT_LINE_WIDTH,
-                label=label,
             )
+            if use_for_ylim:
+                mtr_ylim_values.extend(mtrasym[finite_mtr].tolist())
 
-            if asym_ppm.size:
-                finite_mtr = np.isfinite(asym_ppm) & np.isfinite(mtrasym)
-                axes[1, 0].plot(
-                    asym_ppm[finite_mtr],
-                    mtrasym[finite_mtr],
-                    color=color,
-                    linestyle=linestyle,
-                    alpha=0.85,
-                    linewidth=PLOT_LINE_WIDTH,
-                )
-                if use_for_ylim:
-                    mtr_ylim_values.extend(mtrasym[finite_mtr].tolist())
-
-            if np.count_nonzero(ref_z_mask) > 1 and np.count_nonzero(finite_z) > 1:
-                dz = z[finite_z] - np.interp(
-                    offsets[finite_z],
-                    offsets[ref_z_mask],
-                    ref_z[ref_z_mask],
-                )
-                axes[2, 0].plot(
-                    offsets[finite_z],
-                    dz,
-                    color=color,
-                    linestyle=linestyle,
-                    alpha=0.85,
-                    linewidth=PLOT_LINE_WIDTH,
-                )
-                if use_for_ylim:
-                    dz_ylim_values.extend(dz.tolist())
-
-            if asym_ppm.size and ref_asym_ppm.size and np.count_nonzero(ref_asym_mask) > 1:
-                finite_mtr = np.isfinite(asym_ppm) & np.isfinite(mtrasym)
-                ref_interp = np.interp(
-                    asym_ppm[finite_mtr],
-                    ref_asym_ppm[ref_asym_mask],
-                    ref_mtrasym[ref_asym_mask],
-                )
-                dmtr = mtrasym[finite_mtr] - ref_interp
-                axes[3, 0].plot(
-                    asym_ppm[finite_mtr],
-                    dmtr,
-                    color=color,
-                    linestyle=linestyle,
-                    alpha=0.85,
-                    linewidth=PLOT_LINE_WIDTH,
-                )
-                if use_for_ylim:
-                    dmtr_ylim_values.extend(dmtr.tolist())
-
-        for ax, values in (
-            (axes[1, 0], mtr_ylim_values),
-            (axes[2, 0], dz_ylim_values),
-            (axes[3, 0], dmtr_ylim_values),
-        ):
-            limits = _padded_ylim(values)
-            if limits is not None:
-                ax.set_ylim(*limits)
-
-        axes[0, 0].set_title(
-            f"Case {case_number} / {pool_model}\nS03 timestep comparison",
-            fontsize=PLOT_SUBPLOT_TITLE_FONT_SIZE,
-        )
-        max_asym_ppm = float(np.nanmax(offsets[offsets > 0]))
-        axes[0, 0].invert_xaxis()
-        axes[2, 0].invert_xaxis()
-        axes[1, 0].set_xlim(max_asym_ppm, 0)
-        axes[3, 0].set_xlim(max_asym_ppm, 0)
-        axes[3, 0].set_xlabel("Offset (ppm)")
-        for row in range(4):
-            axes[row, 0].grid(True, alpha=0.25)
-            axes[row, 0].set_ylabel(row_titles[row])
-
-        handles, legend_labels = axes[0, 0].get_legend_handles_labels()
-        fig.legend(
-            handles,
-            legend_labels,
-            loc="lower center",
-            ncol=2,
-            fontsize=PLOT_LEGEND_FONT_SIZE,
-            bbox_to_anchor=(0.5, 0.02),
-        )
-        fig.tight_layout(rect=[0, 0.15, 1, 0.98])
-
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(output_path, dpi=200, bbox_inches="tight")
-        if output_path.suffix.lower() != ".pdf":
-            fig.savefig(output_path.with_suffix(".pdf"), dpi=300, bbox_inches="tight")
-        plt.close(fig)
-    return output_path
-
-
-def _resolve_submission_columns(case: CaseData, labels: list[str]) -> list[str]:
-    """Map display labels such as S14b to parsed spreadsheet column names."""
-    resolved: list[str] = []
-    for label in labels:
-        matches = [
-            column
-            for column in case.submissions.columns
-            if display_submission_label(column) == label or column == label
-        ]
-        if not matches:
-            raise ValueError(
-                f"Submission {label} not found in case {case.case_number}"
+        if np.count_nonzero(ref_z_mask) > 1 and np.count_nonzero(finite_z) > 1:
+            dz = z[finite_z] - np.interp(
+                offsets[finite_z],
+                offsets[ref_z_mask],
+                ref_z[ref_z_mask],
             )
-        resolved.append(matches[0])
-    return resolved
+            axes[2, col].plot(
+                offsets[finite_z],
+                dz,
+                color=color,
+                linestyle=linestyle,
+                alpha=0.85,
+                linewidth=PLOT_LINE_WIDTH,
+            )
+            if use_for_ylim:
+                dz_ylim_values.extend(dz.tolist())
+
+        if asym_ppm.size and ref_asym_ppm.size and np.count_nonzero(ref_asym_mask) > 1:
+            finite_mtr = np.isfinite(asym_ppm) & np.isfinite(mtrasym)
+            ref_interp = np.interp(
+                asym_ppm[finite_mtr],
+                ref_asym_ppm[ref_asym_mask],
+                ref_mtrasym[ref_asym_mask],
+            )
+            dmtr = mtrasym[finite_mtr] - ref_interp
+            axes[3, col].plot(
+                asym_ppm[finite_mtr],
+                dmtr,
+                color=color,
+                linestyle=linestyle,
+                alpha=0.85,
+                linewidth=PLOT_LINE_WIDTH,
+            )
+            if use_for_ylim:
+                dmtr_ylim_values.extend(dmtr.tolist())
+
+    for ax, values in (
+        (axes[1, col], mtr_ylim_values),
+        (axes[2, col], dz_ylim_values),
+        (axes[3, col], dmtr_ylim_values),
+    ):
+        limits = _padded_ylim(values)
+        if limits is not None:
+            ax.set_ylim(*limits)
+
+    axes[0, col].set_title(
+        f"Case {case_number} / {pool_model}\nS03 timestep comparison",
+        fontsize=PLOT_SUBPLOT_TITLE_FONT_SIZE,
+    )
+    max_asym_ppm = float(np.nanmax(offsets[offsets > 0]))
+    axes[0, col].invert_xaxis()
+    axes[2, col].invert_xaxis()
+    axes[1, col].set_xlim(max_asym_ppm, 0)
+    axes[3, col].set_xlim(max_asym_ppm, 0)
+    axes[3, col].set_xlabel("Offset (ppm)")
+    for row in range(4):
+        axes[row, col].grid(True, alpha=0.25)
+
+    return axes[0, col].get_legend_handles_labels()
 
 
-def plot_submission_subset_panel(
-    cases: list[CaseData],
-    submission_labels: list[str],
+def plot_numerical_checks_figure(
+    cases: dict[int, CaseData],
     output_path: Path,
+    mat_path: Path,
     *,
     reference_label: str = REFERENCE_SUBMISSION_LABEL,
-    legend_display_labels: list[str] | None = None,
 ) -> Path:
-    """Case-panel layout for a fixed set of submissions (Z, MTR, differences)."""
-    n_cases = len(cases)
-    plot_legend_labels = legend_display_labels or submission_labels
+    """Combine BART precision (Cases 1--2) and S03 timestep convergence (Case 7)."""
+    bart_cases = [cases[1], cases[2]]
+    submission_labels = [reference_label, "S14", "S14b"]
+    legend_display_labels = [
+        reference_label,
+        r"S14 (single precision)",
+        r"S14b (double precision)",
+    ]
     row_titles = [
         r"$Z$-spectrum",
         r"MTR$_{\mathrm{asym}}$",
-        rf"$\Delta Z$ vs {reference_label}",
-        rf"$\Delta$MTR$_{{\mathrm{{asym}}}}$ vs {reference_label}",
+    ]
+    diff_row_titles = [
+        r"$\Delta Z$",
+        r"$\Delta$MTR$_{\mathrm{asym}}$",
     ]
 
     with _plot_style():
-        fig, axes = plt.subplots(
-            4,
-            n_cases,
-            figsize=(5.5 * n_cases, 11),
-            squeeze=False,
-        )
+        fig, axes = plt.subplots(4, 3, figsize=(16.5, 11), squeeze=False)
 
-        for col, case in enumerate(cases):
+        for col, case in enumerate(bart_cases):
             names = _resolve_submission_columns(case, submission_labels)
             ref_name = _reference_submission_name(names, reference_label=reference_label)
             ref_offsets, ref_z, ref_asym_ppm, ref_mtrasym = _spectra_for_participant(
@@ -1628,7 +1267,7 @@ def plot_submission_subset_panel(
                 offsets, z, asym_ppm, mtrasym = _spectra_for_participant(case, name)
                 finite_z = _display_offset_mask(offsets) & np.isfinite(z)
                 display = display_submission_label(name)
-                legend_label = plot_legend_labels[submission_labels.index(display)]
+                legend_label = legend_display_labels[submission_labels.index(display)]
                 axes[0, col].plot(
                     offsets[finite_z],
                     z[finite_z],
@@ -1696,81 +1335,85 @@ def plot_submission_subset_panel(
             axes[3, col].set_xlabel("Offset (ppm)")
             for row in range(4):
                 axes[row, col].grid(True, alpha=0.25)
-                axes[row, 0].set_ylabel(row_titles[row])
+                if row < 2:
+                    axes[row, 0].set_ylabel(row_titles[row])
+                else:
+                    axes[row, 0].set_ylabel(diff_row_titles[row - 2])
 
-        handles, labels = axes[0, 0].get_legend_handles_labels()
-        if legend_display_labels:
-            label_order = {label: handle for label, handle in zip(labels, handles)}
-            handles = [label_order[label] for label in plot_legend_labels if label in label_order]
-            labels = [label for label in plot_legend_labels if label in label_order]
-        else:
-            handles, labels = _sorted_legend(handles, labels)
-        fig.legend(
-            handles,
-            labels,
-            loc="lower center",
-            ncol=len(labels),
-            fontsize=PLOT_LEGEND_FONT_SIZE,
-            bbox_to_anchor=(0.5, 0.02),
+        timestep_handles, timestep_labels = _draw_timestep_column(
+            axes,
+            2,
+            mat_path,
+            case_number=7,
+            pool_model="WM 5 pool",
         )
+
+        bart_handles, bart_labels = axes[0, 0].get_legend_handles_labels()
+        label_order = {label: handle for label, handle in zip(bart_labels, bart_handles)}
+        bart_handles = [
+            label_order[label] for label in legend_display_labels if label in label_order
+        ]
+        bart_labels = [
+            label for label in legend_display_labels if label in label_order
+        ]
+        fig.tight_layout(rect=[0, 0.12, 1, 0.98])
+        fig.canvas.draw()
+
+        left_bbox = axes[3, 0].get_position()
+        mid_bbox = axes[3, 1].get_position()
+        right_bbox = axes[3, 2].get_position()
+        bart_anchor_x = (left_bbox.x0 + mid_bbox.x1) / 2
+        timestep_anchor_x = (right_bbox.x0 + right_bbox.x1) / 2
+
+        for handles, labels, anchor_x, ncol in (
+            (bart_handles, bart_labels, bart_anchor_x, 3),
+            (timestep_handles, timestep_labels, timestep_anchor_x, 3),
+        ):
+            legend = fig.legend(
+                handles,
+                labels,
+                loc="lower center",
+                ncol=ncol,
+                fontsize=PLOT_LEGEND_FONT_SIZE,
+                frameon=True,
+                fancybox=False,
+                facecolor="white",
+                edgecolor="0.4",
+                bbox_to_anchor=(anchor_x, 0.07),
+                bbox_transform=fig.transFigure,
+            )
+            legend.get_frame().set_linewidth(0.8)
+
         fig.tight_layout(rect=[0, 0.12, 1, 0.98])
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(output_path, dpi=200, bbox_inches="tight")
+        fig.savefig(output_path, dpi=200, bbox_inches="tight", pad_inches=0.02)
         if output_path.suffix.lower() != ".pdf":
-            fig.savefig(output_path.with_suffix(".pdf"), dpi=300, bbox_inches="tight")
+            fig.savefig(
+                output_path.with_suffix(".pdf"),
+                dpi=300,
+                bbox_inches="tight",
+                pad_inches=0.02,
+            )
         plt.close(fig)
     return output_path
 
 
-def plot_bart_precision_comparison(
-    cases: dict[int, CaseData],
-    output_path: Path,
-    *,
-    case_numbers: list[int] | None = None,
-    reference_label: str = REFERENCE_SUBMISSION_LABEL,
-) -> Path:
-    """Compare single- and double-precision BART against the reference."""
-    case_numbers = case_numbers or [5, 6]
-    case_list = [cases[num] for num in case_numbers]
-    return plot_submission_subset_panel(
-        case_list,
-        [reference_label, "S14", "S14b"],
-        output_path,
-        reference_label=reference_label,
-        legend_display_labels=[
-            reference_label,
-            r"S14 (single precision)",
-            r"S14b (double precision)",
-        ],
-    )
-
-
-def generate_bart_precision_figures(
-    cases: dict[int, CaseData],
-    figures_dir: Path | None = None,
-    *,
-    reference_label: str = REFERENCE_SUBMISSION_LABEL,
-) -> list[Path]:
-    """Write BART single- vs double-precision panels for all case pairs."""
-    out = figures_dir or FIGURES_DIR
-    pairs = [
-        ([1, 2], "Figure_BART_precision_12.png"),
-        ([3, 4], "Figure_BART_precision_34.png"),
-        ([5, 6], "Figure_BART_precision_56.png"),
-        ([7, 8], "Figure_BART_precision_78.png"),
-    ]
-    paths: list[Path] = []
-    for case_numbers, filename in pairs:
-        paths.append(
-            plot_bart_precision_comparison(
-                cases,
-                out / filename,
-                case_numbers=case_numbers,
-                reference_label=reference_label,
+def _resolve_submission_columns(case: CaseData, labels: list[str]) -> list[str]:
+    """Map display labels such as S14b to parsed spreadsheet column names."""
+    resolved: list[str] = []
+    for label in labels:
+        matches = [
+            column
+            for column in case.submissions.columns
+            if display_submission_label(column) == label or column == label
+        ]
+        if not matches:
+            raise ValueError(
+                f"Submission {label} not found in case {case.case_number}"
             )
-        )
-    return paths
+        resolved.append(matches[0])
+    return resolved
 
 
 def generate_paper_figures(
@@ -1814,42 +1457,14 @@ def generate_paper_figures(
                 out / "All_Cases_Z_and_MTRasym_ref.png",
             )
         )
-        paths.append(
-            plot_difference_overview(
-                cases,
-                out / "All_Cases_Z_and_MTRasym_diff.png",
-                exclude_zmt=exclude_zmt,
-            )
-        )
-        paths.append(
-            plot_max_spread_summary(
-                cases,
-                out / "Figure_max_Z_spread.png",
-                exclude_zmt=exclude_zmt,
-            )
-        )
-        paths.append(
-            plot_mean_abs_diff_summary(
-                cases,
-                out / "Figure_mean_abs_diff.png",
-                exclude_zmt=exclude_zmt,
-            )
-        )
-        paths.extend(
-            generate_bart_precision_figures(
-                cases,
-                out,
-            )
-        )
 
     mat_path = SCRIPTS_ROOT / "Case7_timestep.mat"
-    if mat_path.exists():
+    if mat_path.exists() and 1 in cases and 2 in cases:
         paths.append(
-            plot_case_timestep_comparison(
-                out / "Case_7_timestep.png",
+            plot_numerical_checks_figure(
+                cases,
+                out / "Figure_numerical_checks.png",
                 mat_path,
-                case_number=7,
-                pool_model="WM 5 pool",
             )
         )
 
