@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 data/
 *.xlsx
-
+cof/
 ### Latex files
 ## Core latex/pdflatex auxiliary files:
 ## Core latex/pdflatex auxiliary files:
@@ -289,3 +289,5 @@ TSWLatexianTemp*
 .vscode/*
 
 *.bbl-SAVE-ERROR
+
+

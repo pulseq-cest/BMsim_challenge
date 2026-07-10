@@ -71,6 +71,6 @@ Parsed submission columns use `S01`, `S02`, ... labels; the tidy CSV also keeps 
 - `All_Cases_Z_and_MTRasym_diff.png`
 - `Figure_max_Z_spread.png` (summary bar chart)
 - `Figure_BART_precision_12.png`, `Figure_BART_precision_34.png`, `Figure_BART_precision_56.png`, `Figure_BART_precision_78.png` (single- vs double-precision BART vs S02)
-- `Case_6_timestep.png` (S03 Case 6 fixed-timestep convergence)
+- `Case_7_timestep.png` (S03 Case 7 fixed-timestep convergence)
 
 Reference column for Δ plots: first remaining submission after filtering (typically M. Zaiss).

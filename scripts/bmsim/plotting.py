@@ -86,6 +86,22 @@ def _line_style(index: int):
     return styles[index % len(styles)]
 
 
+def _submission_variant_index(label: str) -> int:
+    """Return 0 for the primary trace and 1+ for solver variants (e.g. S14b)."""
+    base, separator, suffix = label.partition("_")
+    if not separator:
+        return 0
+    if suffix.lower() == "zmt":
+        return 0
+    first_suffix = suffix.split("_", 1)[0]
+    if not first_suffix.isdigit():
+        return 0
+    letter_index = int(first_suffix) - 1
+    if base in {"S14", "S15"} and first_suffix == "1":
+        return 0
+    return letter_index
+
+
 def _submission_index(label: str) -> int:
     base = display_submission_label(label).split()[0]
     match = re.match(r"S(\d+)", base)
@@ -94,17 +110,29 @@ def _submission_index(label: str) -> int:
     return int(match.group(1)) - 1
 
 
+_VARIANT_LINESTYLES = ("--", "-.", ":", (0, (5, 1)), (0, (3, 1, 1, 1)))
+
+
 def _submission_color(label: str):
     cmap = plt.get_cmap("tab20")
-    return cmap(_submission_index(label) % 20)
+    base_idx = _submission_index(label)
+    variant = _submission_variant_index(label)
+    return cmap((base_idx + variant * 11) % 20)
 
 
 def _submission_linestyle(label: str):
+    variant = _submission_variant_index(label)
+    if variant > 0:
+        return _VARIANT_LINESTYLES[(variant - 1) % len(_VARIANT_LINESTYLES)]
     return _line_style(_submission_index(label))
 
 
-def _submission_sort_key(label: str) -> tuple[int, str]:
-    return _submission_index(label) + 1, label
+def _submission_sort_key(label: str) -> tuple[int, int, str]:
+    return (
+        _submission_index(label),
+        _submission_variant_index(label),
+        display_submission_label(label),
+    )
 
 
 def _sort_submission_names(names: list[str]) -> list[str]:
@@ -176,10 +204,10 @@ def _sorted_legend(handles, labels):
     return list(sorted_handles), list(sorted_labels)
 
 
-def _zmt_comparison_legend_sort_key(label: str) -> tuple[int, int, str]:
+def _zmt_comparison_legend_sort_key(label: str) -> tuple[int, int, int, str]:
     mt_group = 1 if " zMT" in label else 0
-    subm_number, _ = _submission_sort_key(label)
-    return mt_group, subm_number, label
+    subm_number, variant, display = _submission_sort_key(label)
+    return mt_group, subm_number, variant, display
 
 
 def _sorted_zmt_comparison_legend(handles, labels):
@@ -1389,8 +1417,8 @@ def _padded_ylim(
     return vmin - margin, vmax + margin
 
 
-def load_case6_timestep_mat(mat_path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Load S03 Case 6 timestep comparison data from a MATLAB file."""
+def load_timestep_mat(mat_path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Load S03 timestep comparison data from a MATLAB file."""
     import scipy.io as sio
 
     data = sio.loadmat(mat_path)
@@ -1402,14 +1430,16 @@ def load_case6_timestep_mat(mat_path: Path) -> tuple[np.ndarray, np.ndarray, np.
     return offsets, timesteps, spectra
 
 
-def plot_case6_timestep_comparison(
+def plot_case_timestep_comparison(
     output_path: Path,
     mat_path: Path,
     *,
+    case_number: int = 7,
+    pool_model: str = "WM 5 pool",
     reference_index: int = -1,
 ) -> Path:
     """Plot Z/MTR_asym spectra for multiple S03 timesteps in case-panel style."""
-    offsets, timesteps, spectra = load_case6_timestep_mat(mat_path)
+    offsets, timesteps, spectra = load_timestep_mat(mat_path)
     labels = [_format_timestep_label(dt) for dt in timesteps]
     ref_label = labels[reference_index]
 
@@ -1508,7 +1538,7 @@ def plot_case6_timestep_comparison(
                 ax.set_ylim(*limits)
 
         axes[0, 0].set_title(
-            "Case 6 / 2 pool Cr\nS03 timestep comparison",
+            f"Case {case_number} / {pool_model}\nS03 timestep comparison",
             fontsize=PLOT_SUBPLOT_TITLE_FONT_SIZE,
         )
         max_asym_ppm = float(np.nanmax(offsets[offsets > 0]))
@@ -1592,8 +1622,8 @@ def plot_submission_subset_panel(
             ref_z_mask = _display_offset_mask(ref_offsets) & np.isfinite(ref_z)
             ref_asym_mask = np.isfinite(ref_asym_ppm) & np.isfinite(ref_mtrasym)
 
-            for line_index, name in enumerate(names):
-                color = plt.get_cmap("tab10")(line_index % 10)
+            for name in names:
+                color = _submission_color(name)
                 linestyle = _submission_linestyle(name)
                 offsets, z, asym_ppm, mtrasym = _spectra_for_participant(case, name)
                 finite_z = _display_offset_mask(offsets) & np.isfinite(z)
@@ -1812,12 +1842,14 @@ def generate_paper_figures(
             )
         )
 
-    mat_path = SCRIPTS_ROOT / "Case6_timestep.mat"
+    mat_path = SCRIPTS_ROOT / "Case7_timestep.mat"
     if mat_path.exists():
         paths.append(
-            plot_case6_timestep_comparison(
-                out / "Case_6_timestep.png",
+            plot_case_timestep_comparison(
+                out / "Case_7_timestep.png",
                 mat_path,
+                case_number=7,
+                pool_model="WM 5 pool",
             )
         )
 

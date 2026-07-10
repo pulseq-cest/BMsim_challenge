@@ -1,0 +1,120 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{textcomp}
+\usepackage[hyphens]{url}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{hyperref}
+\usepackage{lineno}
+
+\geometry{margin=2.5cm}
+\raggedbottom
+
+\newcommand{\affil}[1]{\textsuperscript{#1}}
+\usepackage{xr-hyper}
+\externaldocument{bmsim}
+
+\begin{document}
+
+\title{Supporting Information for:\\[0.4em]
+\large Bloch-McConnell Simulation Study -- Comparison of Various CEST Simulation Frameworks}
+
+\author{\parbox{\textwidth}{\centering
+Markus Huemer\affil{1},
+Patrick Schuenke\affil{2,3},
+and the BMsim Challenge participants
+\\[1ex]
+\small \affil{1}Institute of Biomedical Imaging, Graz University of Technology, Graz, Austria\\
+\small \affil{2}Physikalisch-Technische Bundesanstalt (PTB), Braunschweig and Berlin, Germany\\
+\small \affil{3}NVision Quantum Technologies, Ulm, Germany
+}}
+
+\date{\today}
+
+\maketitle
+
+This Supporting Information provides pool-model parameters and additional implementation details for the participating simulation submissions referenced in the main manuscript.
+
+\section{Description of the pool models}\label{si:poolmodels}
+\begin{table}[h]
+\centering
+\caption{Parameters for the 2 pool model}
+\begin{tabular}{c|c|c|c|c|c}
+\textbf{Pool} & \textbf{f}(1) & $\mathbf{T_1}$(s) & $\mathbf{T_2}$ (s) & \textbf{k} (Hz) & \textbf{dw} (ppm) \\
+water & 1 & 3 & 2 & - & - \\
+creatine & 5e-4 & 1.05 & 0.1 & 50 & 1.9
+\end{tabular}%
+\end{table}
+\begin{table}[h]
+\centering
+\caption{Parameters for the 5 pool model}
+\begin{tabular}{c|c|c|c|c|c}
+\textbf{Pool} & \textbf{f}(1) & $\mathbf{T_1}$(s) & $\mathbf{T_2}$(s) & \textbf{k} (Hz) & \textbf{dw} (ppm) \\
+water & 1 & 1 & 0.04 & - & - \\
+MT & 0.1351 & 1 & 4e-5 & 30 & -3 \\
+amide & 9.009e-4 & 1 & 0.1 & 50 & 3.5 \\
+guanidine & 9.009e-4 & 1 & 0.1 & 1000 & 2 \\
+NOE & 4.5e-3 & 1.3 & 0.005 & 20 & -3 \\
+
+\end{tabular}%
+\end{table}
+
+
+\section{Additional description of simulations}\label{si:simulations}
+
+\noindent\textbf{S01 -- M. Zaiss -- Pulseq-CEST}\\
+The submission used the MATLAB implementation of Pulseq-CEST \cite{Herz2021}, which combines a Pulseq-based sequence parser with a C++ Bloch--McConnell simulation core. Pool parameters were read from the YAML model files provided with the challenge, and saturation schemes were simulated from the supplied Pulseq \verb|.seq| files. Magnetization evolution was computed sequentially for each sequence block (RF, delays, and gradients). For piecewise-constant time intervals, the affine Bloch--McConnell system was propagated using a Pad\'e approximation to the matrix exponential. Pools were assembled dynamically from the YAML specification, including separate water, CEST, NOE, and full xyz MT compartments. Shaped RF pulses were resampled according to the maximum number of samples defined in the model file. The Pulseq-CEST code and documentation are available at \url{https://pulseq-cest.github.io/}.\\
+
+\noindent\textbf{S02 -- P. Schuenke -- BMCTool}\\
+BMCTool is a purely Python-based Bloch--McConnell simulation framework for CEST and related multi-pool exchange experiments. Simulations are driven by Pulseq \verb|.seq| files (parsed via PyPulseq), which provide the full event timing (RF, gradients, delays, ADCs), while scanner settings and pool parameters are specified in YAML configuration files. The magnetization evolution is computed block-by-block: RF events are optionally resampled to a user-defined maximum number of samples and applied piecewise; delays are simulated as free precession/relaxation; and spoiler gradients are modeled as complete transverse spoiling. For each time interval, the affine Bloch--McConnell system $\dot{\mathbf{M}}=\mathbf{A}\mathbf{M}+\mathbf{c}$ is propagated using a Pad\'e approximation to the matrix exponential (with the steady-state shift computed from $\mathbf{A}^{-1}\mathbf{c}$ via a pseudoinverse), enabling stable simulation of arbitrary Pulseq-defined irradiation schemes.\\
+
+\noindent\textbf{S03 \& S04 -- M.Huemer \& R.Stollberger and M.Huemer \& R.Stollberger 2}\\
+Simulation based on work published in \cite{Graf2021}, written in MATLAB. The second submission does not use the operator splitting proposed in \cite{Graf2021}, as a check on the influence this has on the simulation results. As described in the paper, a predefined constant time-step is used, and all offsets are solved in parallel. This can lead to memory problems and limit accuracy with long saturation times and many offsets. In S03 in each case, the timestep was chosen such that all available RAM (64GB) of the test workstation was used. The timesteps were: [1e-4, 1e-5, 1e-5, 5e-8, 2e-7, 1e-5, 1e-5, 1e-7]. The simulation in S04 does not solve all offsets in parallel, therefore the memory demand is much lower and shorter time increments are possible, this can increase performance (visible in Case 3), but leads to longer computation times.
+The simulation and derivatives are used in \cite{Stilianu2025}\cite{Huemer2025} and the simulation source code is available in the data to reproduce these results \url{https://doi.org/10.5281/zenodo.15768062}. Scripts to reproduce the simulation results of S03 can also be found here: \url{https://gitlab.tugraz.at/ibi/mrirecon/miscellaneous/bmc-simulation-matlab}\\
+
+\noindent\textbf{S06 -- N. Vladimirov \& O. Perlman - open-py-cest-mrf}\\
+The simulator was built with a C++ backend, a Pulseq sequence specification, and a Python front end that supports parallel computation. The backend closely follows the Pulseq-cest implementation and provides an interface to facilitate MRF simulations, streamlining parameter modifications. The Bloch-McConnell equations are solved in an iterative manner using the Pade approximation for matrix exponentiation, with a SWIG-based wrapper that enables Python integration. The Python front end is tailored for MRF simulations, using BMCTool definitions to set up and modify parameters on the fly while efficiently handling C++ function calls \cite{Vladimirov2025}.\\
+
+\noindent\textbf{S09 -- D. L. Longo \& F. Ramdhane}\\
+Simulation based on the Bloch-McConnell work published in \cite{Zaiss2018}, written in Matlab by adapting the code available at \url{https://github.com/cest-sources/BM_sim_fit}. The BM equations have been solved analytically.\\
+
+
+\noindent\textbf{S12 -- H.Zhang \& J.Huang - CESTsimu}\\
+CESTsimu is an open-source GUI-based CEST simulation tool, written in MATLAB. It is compatible with Pulseq-CEST, able to simulate 1D/2D CEST under $B_0$/$B_1$ inhomogeneities. 
+The simulation solver is implemented through numerical iteration of the Bloch-McConnell equations. 
+RF events are defined using cell arrays, where each cell represent either a continuous wave or a shaped pulse. The solver processes each RF event sequentially. 
+The time step is specified within each pulse cell. For each time interval, the evolution is modeled in matrix form as $dM/dt=AM+c$, and the equations are solved using two built-in MATLAB functions: \verb|mldivide()| and \verb|expm()|. The solver code along with its demo are available at: \url{https://github.com/JianpanHuang/BMsim_challenge}.\\
+
+
+\noindent\textbf{S14 -- V. Buchegger, M. Juschitz, N. Scholand \& M. Uecker -- BART}\\
+The BART submission used the Bloch--McConnell simulation implementation in the Berkeley Advanced Reconstruction Toolbox (BART). The BART toolbox is a free and open-source image--reconstruction framework for Computational Magnetic Resonance Imaging \cite{Blumenthal2026}. The Bloch--McConnell simulation is written in C and solves the Bloch--McConnell equations using a Runge--Kutta--Dormand--Prince scheme \cite{Scholand2023}. The main submission (S14) used single-precision floating point arithmetic; an additional variant (S14b) was provided using double precision. The source code is available at \url{https://codeberg.org/mrirecon/bart}.\\
+
+\noindent\textbf{S15 -- M. Quach -- CESTSim.jl}
+
+CESTSim.jl provides a Julia-based implementation for Bloch-McConnell simulations, with flexible choices of ODE solvers afforded by DifferentialEquations.jl. For the submissions to this challenge, the ODE solver of choice was a 5th-order Rosenbrock-Wanner method \cite{Steinebach2023}. To demonstrate the impact of the choice of solver, an additional submission derived from using a 2/3rd-order Rosenbrock method (\textit{Rosenbrock23()}) was provided to Case 2 (submission S15b in Figure~\ref{fig:ReasulsAll12} of the main manuscript). For 5-pool cases, it was assumed that all solute pools underwent exchange with water and water only (i.e., no cross-exchange between non-water pools). The relative tolerance for cases 1-4 (cw) and cases 5-8 (pulsed) were $1e-3$ and $1e-5$, respectively. The default absolute tolerance of $1e-6$ was used for all cases. For cases 5-8, the RF trains were interpolated and scaled using a constant (0th-order) B-spline. For each frequency offset, the entire RF train including pulse delays were interpolated and the system was solved across the entire saturation and spoiling delay duration, instead of block-by-block. In general, CESTSim.jl supports multi-pool simulations and the construction of complex saturation and imaging sequence protocols (and flexible interpolation options) for simulation. Other conditions such as $\delta\omega$ shift, spoiling, and incomplete recovery can also be incorporated into the simulations.\\
+
+\noindent\textbf{S16 -- F. Zimmermann et al. -- MRpro}\\
+MRpro \cite{mrpro} is an open-source PyTorch-based framework for MR image reconstruction, quantitative parameter estimation, and deep learning. Its Bloch--McConnell simulator is GPU-accelerated and fully differentiable with respect to sequence and tissue parameters. It propagates the affine system $\dot{\mathbf{M}}=\mathbf{A}\mathbf{M}+\mathbf{c}$ via matrix-exponential evolution for each sequence block, falling back to an augmented homogeneous formulation when systems are singular. The simulator supports multi-pool exchange, static off-resonance, and relative $B_1$ inhomogeneity through modular blocks including constant RF, piecewise-shaped RF, delays, gradients with isochromat dephasing, spoiling, and readout. For piecewise-shaped pulses, the evolution is computed sample-by-sample with chunked propagation and activation checkpointing to reduce memory use, including in the long pulse-train benchmark cases 6 and 7.\\
+
+\noindent\textbf{S17 -- O. Cohen}\\
+The simulator was implemented in pyTorch for differentiability and efficient GPU-usage. A helper script was used to interface between the YAML configuration files and the simulator parameters. Bloch-McConnell equations are solved using the pyTorch matrix exponential (\verb|torch.matrix_exp()|) and \verb|torch.linalg.solve()| for the steady-state term. The simulator supports multi-pool exchange for arbitrary number of pools and flexible acquisitions using user-defined acquisition schedules.\\
+
+
+
+
+\noindent\textbf{S19 -- P. Parnianpour \& E. P. Pioro}\\
+The BM equations ($dM/dt  = A\cdot M + b$) were solved analytically using the matrix exponential:
+M(t) = expm$(A\cdot t) \cdot (M_0 - M_{ss}) + M_{ss}$
+where $M_{ss} = -A^{-1}b$ is the steady state (via \verb|numpy.linalg.lstsq|). The matrix exponential uses \verb|scipy.linalg.expm| (Al-Mohy \& Higham 2009, scaling-and-squaring, Padé order selected automatically based on matrix norm up to m=13). No homogeneous augmentation was used.
+For shaped pulses (cases 5--7), the Gaussian envelope was sampled into 200 steps matching the .seq file. Case 8 uses block pulses with a 100$\mu$s interpulse delay. For pulse trains (cases 6--7: 36 pulses), the full-pulse propagator was precomputed once per offset and applied 36 times, reducing expm calls by $36 \times$.\\
+
+
+\bibliographystyle{MRM-AMA}
+\bibliography{MRM-AMA}%
+
+\end{document}
