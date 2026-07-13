@@ -34,7 +34,7 @@ The preparation settings are:
 - pulse duration: 50 ms
 - number of pulses: 1
 - total saturation time: 50 ms
-- pulse power (B1rms): 1.9962 µT
+- pulse power (B1rms): 1.9962 µT / B1 peak 3.327369733085533 µT
 - offset list: -2:0.02:2 ppm
 
 A MATLAB and a Python script to create a [Pulseq](https://github.com/pulseq/pulseq) seq-file is given in the [subfolder of case 5](/case_5)
