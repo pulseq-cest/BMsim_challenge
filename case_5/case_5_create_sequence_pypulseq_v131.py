@@ -105,7 +105,8 @@ GAMMA_HZ = 42.5764
 
 # sequence definitions
 defs: dict = {}
-defs["b1pa"] = 1.78  # B1 peak amplitude [µT] (b1rms calculated below)
+defs["b1pa"] = 1.78  # B1 average amplitude [µT] (b1rms calculated below)
+defs["b1peak"] = 3.327369733085533  # B1 peak amplitude [µT] 
 defs["b0"] = 3  # B0 [T]
 defs["freq"] = defs["b0"] * GAMMA_HZ  # Larmor frequency [Hz]
 defs["n_pulses"] = 1  # number of pulses  #
