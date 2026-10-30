@@ -11,6 +11,21 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{hyperref}
 \usepackage{lineno}
+\usepackage[normalem]{ulem}
+\usepackage{color}
+\usepackage{ifdraft}
+\renewcommand{\r}{\textcolor{red}}
+\ifoptionfinal{\newcommand{\delete}[1]{}}
+{
+	\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
+	\newcommand{\delete}[1]{\r{\stkout{#1}}}
+}
+
+\newcommand{\R}[1]{\ifoptionfinal{}{\marginpar{\textcolor{red}{#1}}}}
+\renewcommand{\b}{\ifoptionfinal{}{\textcolor{blue}}}
+
+
+
 
 \geometry{margin=2.5cm}
 \raggedbottom
@@ -25,64 +40,65 @@
 \title{Bloch-McConnell Simulation Study – Comparison of Various CEST Simulation Frameworks}
 
 \author{\parbox{\textwidth}{\centering
-Markus Huemer\affil{1},
-Patrick Schuenke\affil{2,3},
+Markus Huemer\affil{1,2,3},
+Patrick Schuenke\affil{4,5},
 Viktoria Buchegger\affil{1},
 Martin Juschitz\affil{1},
-Nick Scholand\affil{1,4},
-Felix F. Zimmermann\affil{2},
-Christoph Kolbitsch\affil{2},
-Moritz Simon Fabian\affil{5},
-Nikita Vladimirov\affil{6},
-Or Perlman\affil{6,7},
-Swee Qi Pan\affil{8,9},
-Yee Kai Tee\affil{8},
-Ouri Cohen\affil{10},
-Huabin Zhang\affil{11},
-Jianpan Huang\affil{11},
-Jian Hou\affil{12},
-Qing Zeng\affil{13,14},
-Nirbhay Yadav\affil{13,14},
-Jiadi Xu\affil{13,14},
-Kexin Wang\affil{13,14,15},
-Beomgu Kang\affil{13,14},
-Munendra Singh\affil{13,14},
-Hye-Young Heo\affil{13,14},
-Jingpu Wu\affil{14,16},
-Jinyuan Zhou\affil{14},
-Dario Livio Longo\affil{17},
-Feriel Ramdhane\affil{17},
-Zhongliang Zu\affil{18},
-Malvika Viswanathan\affil{18},
-Pedram Parnianpour\affil{19},
-Erik P. Pioro\affil{19},
-Mara Quach\affil{20,21},
+Nick Scholand\affil{1},
+Felix F. Zimmermann\affil{4},
+Christoph Kolbitsch\affil{4},
+Moritz Simon Fabian\affil{6},
+Nikita Vladimirov\affil{7},
+Or Perlman\affil{7,8},
+Swee Qi Pan\affil{9,10},
+Yee Kai Tee\affil{9},
+Ouri Cohen\affil{11},
+Huabin Zhang\affil{12},
+Jianpan Huang\affil{12},
+Jian Hou\affil{13},
+Qing Zeng\affil{14,15},
+Nirbhay Yadav\affil{14,15},
+Jiadi Xu\affil{14,15},
+Kexin Wang\affil{14,15,16},
+Beomgu Kang\affil{14,15},
+Munendra Singh\affil{14,15},
+Hye-Young Heo\affil{14,15},
+Jingpu Wu\affil{15,17},
+Jinyuan Zhou\affil{15},
+Dario Livio Longo\affil{18},
+Feriel Ramdhane\affil{18},
+Zhongliang Zu\affil{19},
+Malvika Viswanathan\affil{19},
+Pedram Parnianpour\affil{20},
+Erik P. Pioro\affil{20},
+Mara Quach\affil{21,22},
 Rudolf Stollberger\affil{1},
 Martin Uecker\affil{1},
-Moritz Zaiss\affil{5}
+Moritz Zaiss\affil{6}
 \\[1ex]
 \small \affil{1}Institute of Biomedical Imaging, Graz University of Technology, Graz, Austria\\
-\small \affil{2}Physikalisch-Technische Bundesanstalt (PTB), Braunschweig and Berlin, Germany\\
-\small \affil{3}NVision Quantum Technologies, Ulm, Germany\\
-\small \affil{4}Siemens Healthineers, Erlangen, Germany\\
-\small \affil{5}Institute of Neuroradiology, Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU),\\
+\small \affil{2}Athinoula A. Martinos Center for Biomedical Imaging, Department of Radiology, Massachusetts General Hospital, Charlestown, USA\\
+\small \affil{3}Department of Radiology, Harvard Medical School, Boston, USA\\
+\small \affil{4}Physikalisch-Technische Bundesanstalt (PTB), Braunschweig and Berlin, Germany\\
+\small \affil{5}NVision Quantum Technologies, Ulm, Germany\\
+\small \affil{6}Institute of Neuroradiology, Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU),\\
 \small University Hospital Erlangen, Erlangen, Germany\\
-\small \affil{6}School of Biomedical Engineering, Tel Aviv University, Tel Aviv, Israel\\
-\small \affil{7}Sagol School of Neuroscience, Tel Aviv University, Tel Aviv, Israel\\
-\small \affil{8}Lee Kong Chian Faculty of Engineering and Science, Universiti Tunku Abdul Rahman, Kajang, Malaysia\\
-\small \affil{9}Philips Singapore, Singapore, Singapore\\
-\small \affil{10}Department of Medical Physics, Memorial Sloan Kettering Cancer Center, New York, USA\\
-\small \affil{11}Department of Diagnostic Radiology, Li Ka Shing Faculty of Medicine, The University of Hong Kong, Hong Kong\\
-\small \affil{12}Department of Imaging and Interventional Radiology, The Chinese University of Hong Kong, Hong Kong\\
-\small \affil{13}F.M. Kirby Research Center for Functional Brain Imaging, Kennedy Krieger Institute, Baltimore, USA\\
-\small \affil{14}Department of Radiology and Radiological Science, Johns Hopkins University School of Medicine, Baltimore, USA\\
-\small \affil{15}Biomedical Imaging Research Institute, Cedars-Sinai Medical Center, Los Angeles, California, USA\\
-\small \affil{16}Department of Electrical and Computer Engineering, Johns Hopkins University, Baltimore, USA\\
-\small \affil{17}Institute of Biostructures and Bioimaging, National Research Council of Italy, Torino, Italy\\
-\small \affil{18}Institute of Imaging Science, Vanderbilt University Medical Center, Nashville, USA\\
-\small \affil{19}Djavad Mowafaghian Centre for Brain Health, University of British Columbia, Vancouver, Canada\\
-\small \affil{20}Department of Biomedical Engineering and Graeme Clark Institute, The University of Melbourne, Parkville, Australia\\
-\small \affil{21}Melbourne Brain Centre Imaging Unit, The University of Melbourne, Parkville, Australia
+\small \affil{7}School of Biomedical Engineering, Tel Aviv University, Tel Aviv, Israel\\
+\small \affil{8}Sagol School of Neuroscience, Tel Aviv University, Tel Aviv, Israel\\
+\small \affil{9}Lee Kong Chian Faculty of Engineering and Science, Universiti Tunku Abdul Rahman, Kajang, Malaysia\\
+\small \affil{10}Philips Singapore, Singapore, Singapore\\
+\small \affil{11}Department of Medical Physics, Memorial Sloan Kettering Cancer Center, New York, USA\\
+\small \affil{12}Department of Diagnostic Radiology, Li Ka Shing Faculty of Medicine, The University of Hong Kong, Hong Kong\\
+\small \affil{13}Department of Imaging and Interventional Radiology, The Chinese University of Hong Kong, Hong Kong\\
+\small \affil{14}F.M. Kirby Research Center for Functional Brain Imaging, Kennedy Krieger Institute, Baltimore, USA\\
+\small \affil{15}Department of Radiology and Radiological Science, Johns Hopkins University School of Medicine, Baltimore, USA\\
+\small \affil{16}Biomedical Imaging Research Institute, Cedars-Sinai Medical Center, Los Angeles, California, USA\\
+\small \affil{17}Department of Electrical and Computer Engineering, Johns Hopkins University, Baltimore, USA\\
+\small \affil{18}Institute of Biostructures and Bioimaging, National Research Council of Italy, Torino, Italy\\
+\small \affil{19}Institute of Imaging Science, Vanderbilt University Medical Center, Nashville, USA\\
+\small \affil{20}Djavad Mowafaghian Centre for Brain Health, University of British Columbia, Vancouver, Canada\\
+\small \affil{21}Department of Biomedical Engineering and Graeme Clark Institute, The University of Melbourne, Parkville, Australia\\
+\small \affil{22}Melbourne Brain Centre Imaging Unit, The University of Melbourne, Parkville, Australia
 }}
 
 \date{\today}
@@ -97,40 +113,46 @@ Moritz Zaiss\affil{5}
 \noindent\textbf{Results:} For simple two-pool CW saturation (cases 1--2), most submissions agreed within $\sim 10^{-4}$ in $Z$-spectra difference, but residual spread exceeded numerical precision. 
 By contrast, marked differences were observed in the simulations for the five-pool model (cases 3--4) and time-dependent saturation pulses (cases 5--7). 
 The different implementation of the magnetization transfer (MT) pool was identified as a major contributor to these differences. 
-Overall case 5 (a single Gaussian pulse) showed the largest variability among groups; related pulse trains (cases 6--7) displayed additional sideband differences, whereas a short two-pulse WASABI scheme (case 8) agreed more closely.
+Good agreement was achieved for a single Gaussian pulse (case 5); pulse trains (cases 6--7) displayed larger differences, related to the interpulse delays. The two-pulse WASABI scheme (case 8) showed similar problems.
+
 The final observed differences in the simulations could lead to biases of tens of percent in the fitted pool fractions or exchange rates. 
 
 
-\noindent\textbf{Conclusion:} Although the presented study helped to find common ground, Bloch-McConnell simulators from different groups are not yet interchangeable, even for fully specified protocols. Harmonized MT modeling (full $M_{xyz}$ versus $z$-only), shaped-pulse handling, and clear RF power definitions are prerequisites for reproducible quantitative CEST. This open benchmark supports ongoing validation and community standardization.
+\noindent\textbf{Conclusion:} Although the presented study helped to find common ground, Bloch-McConnell simulators from different groups are not yet interchangeable, even for fully specified protocols. Harmonized MT modeling (full $M_{xyz}$ versus $z$-only MT), shaped-pulse handling, and clear RF power definitions are prerequisites for reproducible quantitative CEST. This open benchmark supports ongoing comparison and community standardization.
 \end{abstract}
 
 \noindent\textbf{Keywords:} CEST, MRI, Bloch-McConnell, magnetization transfer, quantitative MRI, inter-site comparison
 
-\noindent\textbf{Correspondence:} Markus Huemer, Institute of Biomedical Imaging, Graz University of Technology, Stremayrgasse 16/III, 8010 Graz, Austria. Email: \texttt{huemer@tugraz.at}
+\noindent\textbf{Correspondence:} Markus Huemer, Athinoula A. Martinos Center for Biomedical Imaging, 149 Thirteenth Street, Charlestown, USA. Email: \texttt{mhuemer@mgh.harvard.edu}
 
 
 
 %FIXME Or Pearlman: Moritz, do we need to replace the number "ZA 814/15-1" with "559955894"?
 
-\noindent\textbf{Wordcount:} Abstract: \~200, Main text: \~4000
+\noindent\textbf{Wordcount:} Abstract: 250, Main text: 5241
 
 
 \section{Introduction}\label{introduction}
 
-Chemical Exchange Saturation Transfer (CEST) MRI is a powerful imaging technique that provides contrast sensitive to exchange processes between solute and water protons. This sensitivity enables novel contrasts that are increasingly explored in clinical MRI applications. Among the most commonly studied CEST contrasts is amide proton transfer weighted (APTw) imaging, which has been used in various organs and has been shown to be particularly useful in the assessment of cancer \cite{Zhou2022Consens}, neurodegenerative diseases \cite{ChenLin2019}, and other pathologies like ischemic stroke \cite{Tietze2014}. In the context of cancer, CEST MRI has been used to differentiate tumor progression from radiation necrosis \cite{Zeyen2025}, assess treatment response \cite{Kroh2023}, and detect genetic mutations such as IDH in gliomas \cite{Paech2018}. Recently, there has been growing interest in quantitative CEST approaches (qCEST), which aim to provide quantitative insights into exchange rates and solute concentrations. Such approaches include Bloch-McConnell model fitting, ratiometric methods, and CEST MR fingerprinting.
-Quantitative CEST analysis techniques are based on the Bloch-McConnell equations, which extend the classical Bloch equations to systems of coupled proton pools with chemical exchange \cite{McConnell1958}. For a system of $N$ pools, the magnetization vector $\mathbf{M}$ contains the transverse and longitudinal components of each pool. During RF irradiation at offset $\Delta\omega$, the time evolution is described by 
+Chemical Exchange Saturation Transfer (CEST) MRI is a powerful imaging technique that provides contrast sensitive to exchange processes between solute and water protons. This sensitivity enables novel contrasts that are increasingly explored in clinical MRI applications. Among the most commonly studied CEST contrasts is amide proton transfer weighted (APTw) imaging, which has been used in various organs and has been shown to be particularly useful in the assessment of cancer \cite{Zhou2022Consens}, neurodegenerative diseases \cite{ChenLin2019}, and other pathologies like ischemic stroke \cite{Tietze2014}. In the context of cancer, CEST MRI has been used to differentiate tumor progression from radiation necrosis \cite{Zeyen2025}, assess treatment response \cite{Kroh2023}, and detect genetic mutations such as IDH in gliomas \cite{Paech2018}. Recently, there has been growing interest in quantitative CEST approaches (qCEST), which aim to provide quantitative insights into exchange rates and solute concentrations. Such approaches include Bloch-McConnell fitting, ratiometric methods, and CEST MR fingerprinting.
+Both, Bloch-McConnell fitting and CEST MRF are based on the Bloch-McConnell (BMC) equations, which extend the classical Bloch equations to systems of coupled proton pools with chemical exchange \cite{McConnell1958}. For a system of $N$ pools, the magnetization vector $\mathbf{M}$ contains the transverse and longitudinal components of each pool. During RF irradiation at offset $\Delta\omega$, the time evolution is described by 
 \begin{equation}
 \dot{\mathbf{M}} = \mathbf{A}(\Delta\omega, B_1, \ldots)\mathbf{M} + \mathbf{c},
 \label{eq:bm}
 \end{equation}
-where $\mathbf{A}$ encodes relaxation, chemical exchange, off-resonance effects, and RF saturation, and $\mathbf{c}$ accounts for equilibrium magnetization. By simulating this evolution for a defined saturation scheme and a range of offsets, one obtains model $Z$-spectra and derived contrasts such as magnetization transfer ratio asymmetry ($MTR_{\mathrm{asym}}$) \cite{Zhou2003}. Because qCEST fitting and fingerprinting pipelines depend directly on these forward simulations, differences between numerical implementations can translate into biases in estimated pool sizes and exchange rates.
+where $\mathbf{A}$ encodes relaxation, chemical exchange, off-resonance effects, and RF saturation, and $\mathbf{c}$ accounts for equilibrium magnetization. By simulating this evolution for a defined saturation scheme and a range of offsets, one obtains model $Z$-spectra and derived contrasts such as magnetization transfer ratio asymmetry ($MTR_{\mathrm{asym}}$) \cite{Zhou2003}. 
 
-Numerous simulation frameworks have been developed to perform Bloch-McConnell simulations, ranging from tools used exclusively within individual research groups to open-source platforms such as Pulseq-CEST \cite{Herz2021}, BMCTool \cite{SchuenkeBMC}, and CEST GUI \cite{Zhang2025}. Despite the availability of these tools, no systematic comparison between different simulation frameworks has been conducted. Because qCEST pipelines depend directly on forward simulations, differences in Bloch-McConnell implementations can propagate to differences in fitted pool parameters and exchange rates. Without a shared reference or ground truth, it remains difficult to judge whether observed variability in qCEST metrics reflects biology, acquisition, or simulation implementation, which makes cross-study comparisons challenging.
+A Bloch-McConnell simulation evaluates Eq.~\ref{eq:bm} for a chosen pool model and saturation scheme. In practice this requires assembling the system matrix $\mathbf{A}$ on each time interval, representing the RF waveform (at some frequency offset, $B_1$ scaling, and sampling or interpolation of the waveform), and propagating $\mathbf{M}$ with a numerical solver. Common choices include a matrix exponential of $\mathbf{A}$ (via Pad\'e approximation or eigenvalue decomposition), ODE integrators, and operator-splitting methods. These approaches can agree when applied carefully, but they differ in time-step or tolerance policy, how piecewise-constant RF intervals are formed, and in convergence. Independently developed frameworks may therefore disagree even for an identical protocol, if the RF is discretized differently, the offset is not reset during interpulse delays, or the MT pool is formulated as $z$-only MT rather than full $M_{xyz}$.
 
-The objective of this work is to address this gap by providing a baseline to compare and ultimately validate Bloch-McConnell simulations from various CEST research groups. To achieve this, we defined two rounds of Bloch-McConnell simulation scenarios, each comprising four cases with well-defined saturation schemes and pool models. These cases were designed to capture a range of commonly encountered CEST saturation settings, including simple CW preparations, shaped-pulse trains as used on clinical MRI scanners, and pool configurations ranging from simple phantoms to brain tissue. Using this benchmark, we compared simulation results from up to 20 different groups, offering new insights into the consistency and reliability of Bloch-McConnell simulations across the field.
+Because Bloch-McConnell model fitting and fingerprinting pipelines depend directly on these forward simulations, differences between implementations can translate into biases in estimated pool sizes and exchange rates.
+Numerous simulation frameworks have been developed to perform Bloch-McConnell simulations, ranging from tools used exclusively within individual research groups to open-source platforms such as Pulseq-CEST \cite{Herz2021}, BMCTool \cite{SchuenkeBMC}, and CEST GUI \cite{Zhang2025}.
+Despite the availability of these tools, no systematic comparison between different simulation frameworks has been conducted. Without a shared reference or ground truth, it remains difficult to judge whether observed variability in qCEST metrics derived from BMC simulations reflects biology, acquisition, or simulation implementation, which makes cross-study comparisons challenging.
+
+The objective of this work is to address this gap by providing a baseline to compare Bloch-McConnell simulations from various CEST research groups. To achieve this, we defined two rounds of Bloch-McConnell simulation scenarios, each comprising four cases with well-defined saturation schemes and pool models. These cases were designed to capture a range of commonly encountered CEST saturation settings, including simple CW preparations, shaped-pulse trains as used on clinical MRI scanners, and pool configurations ranging from simple phantoms to brain tissue. Using this benchmark, we compared simulation results from up to 20 different groups, offering new insights into the consistency and reliability of Bloch-McConnell simulations across the field.
 
 \section{Methods}\label{methods}
 
+%FIXME Before resubmission: update the Zenodo archive (https://doi.org/10.5281/zenodo.21265597) with the current spreadsheet and figures (S09, S15, and S17 were revised after the current deposit; S17 was revised again across all eight cases).
 All necessary simulation settings and information were provided on the public GitHub repository at \url{https://github.com/pulseq-cest/BMsim_challenge}. The dataset used for the figures and analyses in this manuscript is archived on Zenodo at \url{https://doi.org/10.5281/zenodo.21265597}.
 
 \subsection{General Simulation Settings}
@@ -144,9 +166,31 @@ The following settings applied to all benchmark cases unless stated otherwise.
 \end{itemize}
 
 \subsection{Pool Models}\label{pool_models}
-Two different pool models were defined and used in the eight simulation cases. The first pool model is a 2-pool model and consists of a water and one single guanidine-like CEST pool. It is supposed to mimic the situation in a creatine phantom. 
-The second pool model is a 5-pool model consisting of a water pool, an ssMT pool, an amide-like CEST pool, a guanidine-like CEST pool and a rNOE pool, in order to mimic more complex in vivo like environments.
-The pool model configuration files were defined in human- and machine readable yaml file format and can be found in the GitHub repository as well as in Supporting Information Section~\ref{si:poolmodels}.
+Two different pool models were defined and used in the eight simulation cases. The first pool model is a 2-pool creatine model consisting of water and one CEST pool, mimicking a creatine phantom \cite{Goerke2014}.
+The second pool model is a 5-pool model consisting of a water pool, a semisolid magnetization transfer (ssMT) pool, an amide-like CEST pool, a guanidine-like CEST pool and a rNOE pool, in order to mimic more complex in vivo like environments, using a simplified parameterization inspired by \cite{vanZijl2018}.
+The pool model configuration files were defined in human- and machine readable yaml file format and can be found in the GitHub repository. Numerical values are listed in Table~\ref{tab:poolmodels}.
+
+
+\begin{table}[htbp]
+\centering
+\caption{Pool-model parameters used in the benchmark. $f$ is the relative pool size, $T_1$ and $T_2$ are the longitudinal and transverse relaxation times, $k$ is the exchange rate to water, and $\delta_\omega$ is the chemical shift relative to water.}
+\label{tab:poolmodels}
+\small
+\begin{tabular}{llccccc}
+\toprule
+Model & Pool & $f$ & $T_1$ (s) & $T_2$ (s) & $k$ (Hz) & $\delta_\omega$ (ppm) \\
+\midrule
+2-pool & water & 1 & 3 & 2 & -- & 0 \\
+ & creatine & $5\times10^{-4}$ & 1.05 & 0.1 & 50 & 1.9 \\
+\midrule
+5-pool & water & 1 & 1 & 0.04 & -- & 0 \\
+ & ssMT & 0.1351 & 1 & $4\times10^{-5}$ & 30 & $-3$ \\
+ & amide & $9.009\times10^{-4}$ & 1 & 0.1 & 50 & 3.5 \\
+ & guanidine & $9.009\times10^{-4}$ & 1 & 0.1 & 1000 & 2 \\
+ & NOE & $4.5\times10^{-3}$ & 1.3 & 0.005 & 20 & $-3$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 \begin{figure}[t]
@@ -157,15 +201,14 @@ The pool model configuration files were defined in human- and machine readable y
 \end{figure}
 
 \subsection{Simulation Cases}
-In total, eight cases of increasing complexity were compared in two rounds on the pool models described in Section \ref{pool_models}. An overview with the parameters for all cases is listed in Table \ref{table_sim_cases} and the saturation pulses are shown in Figure \ref{fig:Pules}.
-
+In total, eight cases of increasing complexity were compared in two rounds on the pool models described in Section \ref{pool_models}. An overview with the parameters for all cases is listed in Table \ref{table_sim_cases}, the saturation pulses are shown in Figure \ref{fig:Pules} and example $Z$-spectra for all cases are shown in Figure \ref{fig:RefResultsAllCases}. These spectra were generated using the MATLAB implementation of Pulseq-CEST \cite{Herz2021} and are equivalent to submission S01.
 
 \subsubsection{Round 1}
 
 
 In the first round of the challenge, four cases with continuous-wave (CW) saturation and different saturation times were tested. The aim was to cover cases that should first be comparatively straightforward to reproduce and then add complexity from shorter saturation times, additional exchanging pools, and MT modeling afterwards.
 \begin{itemize}
-\item \textbf{Case 1:} A $15$~s CW saturation on the 2-pool model with $B_{1}=2\,\mu T$. This case tests the steady-state for a simple creatine-like phantom and was intended as a baseline test for exchange, relaxation, offset handling, and sign conventions.
+\item \textbf{Case 1:} A $15$~s CW saturation on the 2-pool creatine model with $B_{1}=2\,\mu T$. This case tests the steady-state for a simple creatine phantom and was intended as a baseline test for exchange, relaxation, offset handling, and sign conventions.
 \item \textbf{Case 2:} A $2$~s CW saturation on the same 2-pool model with $B_{1}=2\,\mu T$. Compared with Case 1, this case emphasizes transient saturation behavior while keeping the pool model unchanged, thereby testing whether implementations agree away from the full steady-state.
 \item \textbf{Case 3:} The same $2$~s CW saturation as in Case 2, but applied to the 5-pool white-matter model. This case tests the handling of multiple exchanging pools and, in particular, the implementation of the semisolid MT pool.
 \item \textbf{Case 4:} A short block-pulse preparation as used in the WASABI method \cite{Schuenke2017}, consisting of a $5$~ms pulse with $B_{1}=3.7\,\mu T$ applied to the 5-pool white-matter model. This case probes short-pulse and off-resonance behavior in a multi-pool system, including the influence of MT and phase evolution during a brief RF event.
@@ -209,7 +252,7 @@ In the second round, pulsed saturation using Gaussian and block-pulse preparatio
 
 
 \subsection{Entries and participating groups}
-In total, 20 groups or solver teams participated in the study. Some groups submitted multiple solver variants or additional z-only MT simulations. Additionally, some groups did not submit results for all cases, leading to the following number of submitted entries per case:
+In total, 20 groups or solver teams participated in the study. Some groups submitted multiple solver variants or additional $z$-only MT simulations. Additionally, some groups did not submit results for all cases, leading to the following number of submitted entries per case:
 \begin{itemize}
 \item \textbf{Case 1:} 22 entries
 \item \textbf{Case 2:} 23 entries
@@ -220,62 +263,69 @@ In total, 20 groups or solver teams participated in the study. Some groups submi
 \item \textbf{Case 7:} 19 entries
 \item \textbf{Case 8:} 19 entries
 \end{itemize}
+Fewer entries were received for Cases 5--8 than for the CW cases. There was a time gap between the two challenge rounds, and shaped-pulse simulations may be of limited interest for groups that work mostly in the pre-clinical setting with continuous-wave saturation, which likely explains why some participants did not submit Round 2 results. Further, some additional settings for solvers were tested for the earlier cases and not submitted for the later cases.
 Additional information on the participating groups, solver variants, and implementation details is provided in Table~\ref{tab:participants} and Supporting Information Section~\ref{si:simulations}.
 
-The main comparison figures exclude entries labeled as z-only MT simulations, except for the dedicated $M_{xyz}$ versus $z$-only MT comparison in Section~\ref{subsec:res:zMT}.
+The main comparison figures exclude entries labeled as $z$-only MT simulations, except for the dedicated $M_{xyz}$ versus $z$-only MT comparison in Section~\ref{subsec:res:zMT}.
 
 
 \begin{table}[htbp]
 \centering
 \caption{Overview of participating groups, solver variants, and implementation details. Submission numbers are used as labels in the comparison figures and were assigned in the order of submission.}
 \label{tab:participants}
+% omitted in table cells: margin notes cannot be used in tabular (R2:8).
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{clccccc}
 \textbf{Subm.} & \textbf{Corresponding Participant} & \textbf{Prog. Language} & \textbf{Number of Pools} & \textbf{MT} & \textbf{Solver} & \textbf{Paper \& Code} \\ \hline
 S01 & \textbf{Moritz Zaiss - FAU} & Matlab 2017b / C++ & dynamic & x,y,z & expm with Pade (6 iterations) & pulseq-cest matlab \\
-S02 & \textbf{Patrick Schuenke - PTB} & python & dynamic & x,y,z & expm with eig & BMCTool - \url{github.com/schuenke/BMCTool} \\
+S02 & \textbf{Patrick Schuenke - PTB} & Python & dynamic & x,y,z & expm with eig & BMCTool - \url{github.com/schuenke/BMCTool} \\
 S03 & \textbf{Markus Huemer - IBI TUG} & Matlab & 5 fixed & x,y,z & expm with Operator Splitting & \url{gitlab.tugraz.at/ibi/mrirecon/miscellaneous/bmc-simulation-matlab}\cite{Graf2021} \\
 S04 & \textbf{Markus Huemer - IBI TUG} & Matlab & 7 fixed & x,y,z & expm with eig &  \\
 S05 & \textbf{Qing Zeng - KKI/JHU} & Python & dynamic & x,y,z & expm &  \\
 S06 & \textbf{Nikita Vladimirov - TAU} & Python/C++ & dynamic & x,y,z & Pade & \begin{tabular}{@{}c@{}}open-py-cest-mrf \cite{Vladimirov2025} \\ \url{github.com/momentum-laboratory/molecular-mrf}\end{tabular}  \\
-S07 & \textbf{Zhongliang Zu - VUMC} & Matlab & dynamic & only z & expm with eig &  \\
+S07 & \textbf{Zhongliang Zu - VUMC} & Matlab & dynamic & $z$-only & expm with eig &  \\
 S08 & \textbf{Kexin Wang - KKI/JHU} & Matlab & fixed & x,y,z & expm &  \url{github.com/Kexin-Wang/BMsim}\cite{Wang2024}\\
 S09 & \textbf{Dario Longo - CNR} & Matlab 2021b & fixed & x,y,z & expm & extension of \url{github.com/cest-sources/BM_sim_fit}\cite{Zaiss2018}
  \\
 S10 & \textbf{Moritz Fabian - FAU} & Matlab 2019b/2022b & dynamic & x,y,z & RKDP & \url{gitlab.com/mrilab/sim/bmsim.git} \\
-S11 & \textbf{Beomgu Kang - KKI/JHU} & Matlab / python & dynamic & x,y,z & expm & \url{github.com/Heo-Group}\cite{Singh2023} \\
+S11 & \textbf{Beomgu Kang - KKI/JHU} & Matlab / Python & dynamic & x,y,z & expm & \url{github.com/Heo-Group}\cite{Singh2023} \\
 S12 & \textbf{Huabin Zhang - HKU} & Matlab 2023a & dynamic & x,y,z & expm & \url{ github.com/JianpanHuang/BMsim_challenge} \\
-S13 & \textbf{Jian Hou - CUHK} & Matlab 2023a & dynamic & only z & expm &  \\
+S13 & \textbf{Jian Hou - CUHK} & Matlab 2023a & dynamic & $z$-only & expm &  \\
 S14 & \textbf{Viktoria Buchegger - IBI TUG} & C & fixed & x,y,z & RKDP &  \begin{tabular}{@{}c@{}}BART \cite{Scholand2023} \\ \url{codeberg.org/mrirecon/bart}\end{tabular}\\
 S15 & \textbf{Mara Quach - UniMelb} & Julia v1.11 & dynamic & x,y,z & Rosenbrock & \url{github.com/maraquach/CESTSim.jl}  \\ 
-S16 & \textbf{Felix F. Zimmermann - PTB} & python (torch) & dynamic & x,y,z & expm & \url{github.com/fzimmermann89/mr2} \\
+S16 & \textbf{Felix F. Zimmermann - PTB} & Python (torch) & dynamic & x,y,z & expm & \url{github.com/fzimmermann89/mr2} \\
 S17 & \textbf{Ouri Cohen - MSK} & pytorch & dynamic & x,y,z & expm &  \\
-S18 & \textbf{Jingpu Wu - JHU} & python & dynamic & x,y,z & expm & \url{github.com/JimmyWu990110/BMsim_challenge_Jingpu} \\
-S19 & \textbf{Pedram Parnianpour - UBC} & python & dynamic & x,y,z & expm & \url{github.com/Pedram-Parnianpour/bmsim-challenge-solver.git} \\
+S18 & \textbf{Jingpu Wu - JHU} & Python & dynamic & x,y,z & expm & \url{github.com/JimmyWu990110/BMsim_challenge_Jingpu} \\
+S19 & \textbf{Pedram Parnianpour - UBC} & Python & dynamic & x,y,z & expm & \url{github.com/Pedram-Parnianpour/bmsim-challenge-solver.git} \\
 S20 & \textbf{Swee Qi Pan - UTAR} & Matlab & dynamic & x,y,z & expm & \url{github.com/sweeqipan/BMsim_SQPan_YKTee} \\
 \hline
-\end{tabular}%
+\end{tabular}
 }
 \end{table}
 
 
 \subsection{Magnetization transfer pool formulation}\label{subsec:methods:mt}
 In Bloch–McConnell simulations of magnetization transfer (MT), the semisolid pool is often modeled using only longitudinal ($Z$) magnetization, assuming that transverse components decay instantaneously due to extremely short $T_2$ values. This yields a simplified scalar description in which RF irradiation affects the pool through saturation governed by an effective absorption lineshape and is also known as the Henkelmann model \cite{Graham1997}.
-In contrast, a full $M_{xyz}$ formulation explicitly includes transverse components, enabling the modeling of coherent effects such as off-resonance excitation and phase evolution. The $z$-only approach is computationally efficient and frequently used in simulations for MT and also CEST experiments.
+We refer to this formulation as $z$-only MT.
+In contrast, a full $M_{xyz}$ formulation explicitly includes transverse components, enabling the modeling of coherent effects such as off-resonance excitation and phase evolution. The $z$-only MT approach is computationally efficient and frequently used in simulations for MT and also CEST experiments.
 In the original formulation of this study, the way to simulate the MT pool was not explicitly stated, but results of the first round showed significant differences between $M_{xyz}$ and $z$-only MT models for the same parameters. An example of this is shown in Section~\ref{subsec:res:zMT}. 
 These differences prompted a switch in the study to explicitly require $M_{xyz}$ simulations.
-The zMT simulations are kept in the data source, but are not shown for all results. 
-All submitted zMT only entries reported using a Lorentzian lineshape for the MT pool.
+The $z$-only MT simulations are kept in the data source, but are not shown for all results. 
+All submitted $z$-only MT entries reported using a Lorentzian lineshape for the MT pool.
 
 
 \subsection{Data analysis}\label{subsec:analysis}
 Magnetization transfer ratio asymmetry ($MTR_{\mathrm{asym}}$) was computed from each $Z$-spectrum as $Z(-\Delta\omega) - Z(+\Delta\omega)$ for positive offsets $\Delta\omega$. 
 Inter-submission spread was quantified point-wise at each offset as the absolute difference between the maximum and minimum value across included submissions, separately for the spectra and $MTR_{\mathrm{asym}}$; for each case we report the maximum and median spread across offsets.
 The normalization measurement at $-300$~ppm was excluded from $Z$-spectrum spread calculations. 
+To place the final spreads in context, the same point-wise $Z$ metric was also evaluated on archived revisions of the shared results spreadsheet, restricted to labeled submissions and excluding half-filled spectra and $z$-only MT columns. For each case we report the largest maximum $Z$ spread observed during the study, the median spread at that stage, and the corresponding values of the latest submission.
 In the main comparison figures, spectra and asymmetry curves are also shown as differences to submission S02 (BMCTool), which was used as a documented Pulseq-based reference implementation. It generally lies close to the main cluster of submissions in terms of the point-wise $Z$-spectrum spread, although it is not the median submission for every case.
 
+The main cluster was identified automatically for each case by ranking submissions by their root-mean-square $Z$ difference to S02 and splitting at the largest relative gap in this ranking. If the remaining group still exceeded a maximum point-wise $Z$ spread of $0.01$, the split was repeated. Any submission within $10^{-3}$ of S02 at all offsets was always retained, as to avoid excluding submissions that were very close to the reference for cases with small overall spread.
+
+
 \subsection{Numerical implementation checks}\label{subsec:methods:numchecks}
-Two additional analyses were performed to illustrate how numerical settings can affect CEST simulations. For the BART submission (S14), single- and double-precision variants were compared with the reference S02 in Case~1 and Case~2. For the operator-splitting MATLAB submission S03, Case~7 $Z$-spectra were calculated using multiple fixed timesteps from 500 to 5~$\mu$s (Figure~\ref{fig:numchecks}).
+Two additional analyses were performed to illustrate how numerical settings can affect CEST simulations. For the BART submission (S14), single- and double-precision variants were compared with the reference S02 in Case~1 and Case~2. For the operator-splitting MATLAB submission S03, Case~7 $Z$-spectra were calculated using multiple fixed timesteps from 500 to 5~$\mu$s.
 
 
 \section{Results}\label{Results}
@@ -290,33 +340,35 @@ online at: \url{https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwk
 \end{figure}
 
 \subsection{Round 1 results}
-All results for Cases 1 and 2 are shown in Figure \ref{fig:ReasulsAll12}. Case 1 showed the closest agreement among the Round 1 scenarios. After excluding the normalization offset, the maximum spread across the submitted Z-spectra was $2.7 \times 10^{-3}$, while the median point-wise Z spread was $5.4 \times 10^{-5}$. The corresponding maximum and median $MTR_{\mathrm{asym}}$ spreads were $8.4 \times 10^{-5}$ and $9.4 \times 10^{-6}$, respectively.
+All results for Cases 1 and 2 are shown in Figure \ref{fig:ReasulsAll12}. Case 1 showed the closest agreement among the Round 1 scenarios. After excluding the normalization offset, the maximum spread across the submitted Z-spectra was $1.4 \times 10^{-3}$, while the median point-wise Z spread was $4.0 \times 10^{-5}$. The corresponding maximum and median $MTR_{\mathrm{asym}}$ spreads were $9.3 \times 10^{-5}$ and $1.3 \times 10^{-5}$, respectively.
 
-For Case 2, the shorter saturation time increased the sensitivity to implementation details. Most submissions followed the same overall Z-spectrum shape, but one or more traces deviated visibly over parts of the offset range, resulting in a maximum point-wise Z spread of 0.43 and a median Z spread of $4.0 \times 10^{-3}$. The maximum and median $MTR_{\mathrm{asym}}$ spreads were 0.0095 and $3.8 \times 10^{-5}$, respectively.
+For Case 2, the shorter saturation time increased the sensitivity to implementation details. Most submissions followed the same overall Z-spectrum shape, but one or more traces deviated visibly over parts of the offset range, resulting in a maximum point-wise Z spread of 0.44 and a median Z spread of $3.9 \times 10^{-3}$. The maximum and median $MTR_{\mathrm{asym}}$ spreads were 0.0014 and $1.0 \times 10^{-4}$, respectively.
 
-All results for Cases 3 and 4 are shown in Figure \ref{fig:ReasulsAll34}. Introducing the 5-pool white-matter model in Case 3 led to broader, but more consistent deviations around the offsets affected by the CEST and MT pools. The maximum and median Z spreads were 0.031 and 0.027, and the maximum and median $MTR_{\mathrm{asym}}$ spreads were $6.5 \times 10^{-4}$ and $2.7 \times 10^{-4}$, respectively. Case 4, which used a short WASABI-like block pulse on the same pool model, showed visible differences in the Z-spectra, with maximum and median Z spreads of 0.018 and $6.9 \times 10^{-3}$, and maximum and median $MTR_{\mathrm{asym}}$ spreads of 0.0016 and $7.3 \times 10^{-4}$, respectively.
+All results for Cases 3 and 4 are shown in Figure \ref{fig:ReasulsAll34}. Introducing the 5-pool white-matter model in Case 3 led to broader, but more consistent deviations around the offsets affected by the CEST and MT pools. The maximum and median Z spreads were 0.0026 and 0.0023, and the maximum and median $MTR_{\mathrm{asym}}$ spreads were $3.2 \times 10^{-4}$ and $1.3 \times 10^{-4}$, respectively. Case 4, which used a short WASABI-like block pulse on the same pool model, showed visible differences in the Z-spectra, with maximum and median Z spreads of $1.1 \times 10^{-3}$ and $6.8 \times 10^{-4}$, and maximum and median $MTR_{\mathrm{asym}}$ spreads of 0.0015 and $7.3 \times 10^{-4}$, respectively.
 
 \subsection{Magnetization transfer pool formulation results}\label{subsec:res:zMT}
 Selected entries are shown for Case 3 to highlight the difference between full $M_{xyz}$ MT simulations and $z$-only MT simulations in Figure \ref{fig:ReasultszMT3}. The $z$-only MT simulations formed a distinct response compared with the full $M_{xyz}$ MT implementations, especially in spectral regions where the semisolid pool contributes strongly. 
-Previous analysis \cite{Schuenke2023} showed that the difference between $z$-only and $M_{xyz}$ MT simulations can lead to significant differences in fitted pool fractions and exchange rates, which can be as high as 30\% for the semisolid pool fraction or 50\% for the exchange rate.
+Previous analysis \cite{Schuenke2023} showed that the difference between $z$-only MT and $M_{xyz}$ MT simulations can lead to significant differences in fitted pool fractions and exchange rates, which can be as high as 30\% for the semisolid pool fraction or 50\% for the exchange rate.
 
-Because this difference reflects a modeling choice rather than only a numerical solver difference, z-only MT entries were excluded from the main comparison figures. 
+Because this difference reflects a modeling choice rather than only a numerical solver difference, $z$-only MT entries were excluded from the main comparison figures. 
 
 
 
 \subsection{Round 2 results}
-All results for Cases 5 and 6 are shown in Figure \ref{fig:ReasulsAll56}. Case 5, the single Gaussian pulse, produced the largest absolute Z-spectrum spread of all cases. Although many submissions agreed closely near the central part of the spectrum, one or more submissions showed pronounced deviations, leading to a maximum Z spread of 1.45 and a median Z spread of $6.3 \times 10^{-3}$. The $MTR_{\mathrm{asym}}$ spread was much smaller, with maximum and median values of 0.0026 and $9.1 \times 10^{-4}$, respectively, because the largest spectrum deviations were largely symmetric.
+All results for Cases 5 and 6 are shown in Figure \ref{fig:ReasulsAll56}. Case 5, the single Gaussian pulse, agreed closely, with a maximum Z spread of $3.8 \times 10^{-3}$ and a median Z spread of $6.7 \times 10^{-5}$. The $MTR_{\mathrm{asym}}$ spread was much smaller, with maximum and median values of $1.0 \times 10^{-4}$ and $5.7 \times 10^{-5}$, respectively, because the largest spectrum deviations were largely symmetric.
+A comparison of nearest-neighbor, linear, and cubic interpolation of the sampled Gaussian in S03 produced $Z$ differences below $3\times10^{-4}$ relative to Pulseq-CEST, smaller than this inter-submission spread (Supporting Information Section~\ref{si:rfinterp}).
 
-In Case 6, where the same Gaussian pulse was repeated as a pulse train, the deviations persisted but changed in spectral distribution. The maximum and median Z spreads were 0.76 and $7.6 \times 10^{-3}$, and the maximum and median $MTR_{\mathrm{asym}}$ spreads were 0.0089 and $6.8 \times 10^{-5}$, respectively. The repeated pulses produced additional sideband features in the Z-spectra, which were reproduced with varying accuracy across submissions, hinting at differences in pulse train implementation, interpulse delay handling, and phase evolution during the delays.
+In Case 6, where the same Gaussian pulse was repeated as a pulse train, the largest absolute $Z$-spectrum spread was observed. The maximum and median Z spreads were 0.69 and $3.5 \times 10^{-5}$, and the maximum and median $MTR_{\mathrm{asym}}$ spreads were 0.0073 and $1.7 \times 10^{-5}$, respectively. The repeated pulses produced additional sideband features in the Z-spectra, which were reproduced with varying accuracy across submissions, hinting at differences in pulse train implementation, interpulse delay and frequency handling, and phase evolution during the delays.
+A possible implementation error is that $\omega_{\mathrm{RF}}$ is not reset during $t_{\mathrm{delay}}$ (Supporting Information Section~\ref{si:rfdelay}).
 
-All results for Cases 7 and 8 are shown in Figure \ref{fig:ReasulsAll78}. Case 7 combined the Gaussian pulse train with the 5-pool model and showed maximum and median Z spreads of 0.031 and $7.2 \times 10^{-3}$, and maximum and median $MTR_{\mathrm{asym}}$ spreads of $9.0 \times 10^{-4}$ and $6.9 \times 10^{-4}$, respectively. Compared with Case 6, the multi-pool model shows much closer agreement.
+All results for Cases 7 and 8 are shown in Figure \ref{fig:ReasulsAll78}. Case 7 combined the Gaussian pulse train with the 5-pool model and showed maximum and median Z spreads of 0.012 and $2.9 \times 10^{-3}$, and maximum and median $MTR_{\mathrm{asym}}$ spreads of $3.5 \times 10^{-4}$ and $1.5 \times 10^{-4}$, respectively. Compared with Case 6, the multi-pool model shows much closer agreement.
 
-Case 8 showed a different pattern. The short two-pulse WASABI-like preparation produced visible Z-spectrum differences, with maximum and median Z spreads of 0.093 and 0.048. The $MTR_{\mathrm{asym}}$ curves showed maximum and median spreads of approximately $10^{-3}$ and $4.7 \times 10^{-4}$, respectively. 
+Case 8 showed a different pattern. The short two-pulse WASABI-like preparation produced visible Z-spectrum differences, with maximum and median Z spreads of 0.079 and 0.033. The $MTR_{\mathrm{asym}}$ curves showed maximum and median spreads of $6.4 \times 10^{-4}$ and $1.7 \times 10^{-4}$, respectively. 
 
 \subsection{Numerical precision and time-step convergence}\label{subsec:res:numchecks}
 Figure~\ref{fig:numchecks} summarizes two numerical implementation checks. The BART comparison shows that single- and double-precision arithmetic can produce visibly different spectra, even when the underlying solver and pool model are identical. The clearest example was Case~2 ($2$~s CW saturation on the 2-pool model), where single-precision BART showed high-frequency oscillatory noise in the difference plots. The maximum point-wise deviation from S02 was approximately $1.1 \times 10^{-3}$ in $Z$ for single precision and $2.6 \times 10^{-4}$ for double precision, corresponding to an approximately fourfold reduction in peak numerical error. The mean point-wise deviation was reduced from $5.6 \times 10^{-4}$ to $3.2 \times 10^{-5}$. Case~1 ($15$~s CW saturation) showed the same pattern at smaller amplitude.
 
-The fixed-timestep analysis for submission S03 in Case~7 shows a related effect. A timestep of 500~$\mu$s produced a clearly different $Z$-spectrum, reducing the timestep to 100~$\mu$s produces a normal looking spectrum, which still deviates from the finest timestep of 5~$\mu$s by over 10\%. Halfing the timestep to 50~$\mu$s produces a spectrum reduces the deviation to less than 5\% and further reducing the timestep to 10~$\mu$s produces a spectrum that is indistinguishable (at the shown scale) from the finest timestep.
+The fixed-timestep analysis for submission S03 in Case~7 shows a related effect. A timestep of 500~$\mu$s produced a clearly different $Z$-spectrum, reducing the timestep to 100~$\mu$s produces a normal looking spectrum, which still deviates from the finest timestep of 5~$\mu$s by over 10\%. Halving the timestep to 50~$\mu$s reduces the deviation to less than 5\% and further reducing the timestep to 10~$\mu$s produces a spectrum that is indistinguishable (at the shown scale) from the finest timestep.
 
 
 
@@ -325,39 +377,39 @@ The fixed-timestep analysis for submission S03 in Case~7 shows a related effect.
 \centering
 \includegraphics[width=1\linewidth]{figures/Figure_CASE_12.png}
 \caption{Cases 1 and 2: $Z$- and $MTR_{asym}$ spectra with differences to S02. 
-The main cluster is marked in the Z-spectra plots and contained 17 (of 19) entries in Case 1 and 16 (of 20) entries in Case 2, with maximum deviations of $6.78\cdot10^{-05}$ and $2.71\cdot10^{-04}$, respectively within those clusters.
-S15 and S17 show the largest deviations in Case 1. 
+The main cluster is marked in the Z-spectra plots and contained 18 (of 19) entries in Case 1 and 16 (of 20) entries in Case 2, with maximum deviations of $9.24\cdot10^{-04}$ and $2.71\cdot10^{-04}$, respectively within those clusters.
+S17 shows the largest deviation in Case 1. 
 S14b represents a solver variant of S14, using double precision instead of single precision. 
-In Case~2, S15b denotes an alternative solver variant of S15, which shows the largest deviation from the main cluster. More information on these solver variants can be found in Supporting Information Section~\ref{si:simulations}.}
+In Case~2, S14, S15, S15b, and S17 fall outside the main cluster; S15b is an alternative solver variant of S15 and shows the largest deviation. More information on these solver variants can be found in Supporting Information Section~\ref{si:simulations}.}
 \label{fig:ReasulsAll12}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1\linewidth]{figures/Case_3_zMT_comparison.png}
-\caption{Selected entries for Case 3 showing full $M_{xyz}$ MT simulations (S01, S06, S10 and S19) in comparison with $z$-only MT simulations (S01, S10 and S13). The $M_{xyz}$ entries closely match with the chosen reference (here S01 xyzMT). The $z$-only MT entries show a significant difference to the reference, with close agreement between each other.}
-\label{fig:ReasultszMT3}
-\end{figure}
-
-\begin{figure}[t]
-\centering
 \includegraphics[width=1\linewidth]{figures/Figure_CASE_34.png}
-\caption{Cases 3 and 4: simulated $Z$- and $MTR_{asym}$ spectra with differences to S02. The main cluster is marked in the Z-spectra plots and contained 18 (of 19) entries in Case 3 and 18 (of 19) entries in Case 4, with maximum deviations of $5.90\cdot10^{-04}$ and $1.11\cdot10^{-03}$, respectively within those clusters. S17 shows the largest deviations in both cases; in Case 4, S18 also differs noticeably in $MTR_{asym}$.}
+\caption{Cases 3 and 4: simulated $Z$- and $MTR_{asym}$ spectra with differences to S02. The main cluster is marked in the Z-spectra plots and contained 18 (of 19) entries in Case 3 and 18 (of 19) entries in Case 4, with maximum deviations of $5.90\cdot10^{-04}$ and $9.55\cdot10^{-04}$, respectively within those clusters. S17 shows the largest deviation in Case 3. In Case 4, S18 falls outside the main cluster and also differs noticeably in $MTR_{\mathrm{asym}}$.}
 \label{fig:ReasulsAll34}
 \end{figure}
 
 
 \begin{figure}[t]
 \centering
+\includegraphics[width=1\linewidth]{figures/Case_3_zMT_comparison.png}
+\caption{Selected entries for Case 3 showing full $M_{xyz}$ MT simulations (S01, S06, S10 and S19) in comparison with $z$-only MT simulations (S01, S10 and S13; labeled zMT in the figure). The $M_{xyz}$ entries closely match with the chosen reference (S01, labeled xyzMT). The $z$-only MT entries show a significant difference to the reference, with close agreement between each other.}
+\label{fig:ReasultszMT3}
+\end{figure}
+
+\begin{figure}[t]
+\centering
 \includegraphics[width=1\linewidth]{figures/Figure_CASE_56.png}
-\caption{Cases 5 and 6: simulated $Z$- and $MTR_{asym}$ spectra with differences to S02. The main cluster is marked in the Z-spectra plots and contained 14 (of 16) entries in Case 5 and 6 (of 17) entries in Case 6, with maximum deviations of $1.68\cdot10^{-03}$ and $1.96\cdot10^{-03}$, respectively within those clusters. S09 and S17 show the largest deviations in Case 5.}
+\caption{Cases 5 and 6: simulated $Z$- and $MTR_{asym}$ spectra with differences to S02. The main cluster is marked in the Z-spectra plots and contained 13 (of 16) entries in Case 5 and 9 (of 17) entries in Case 6, with maximum deviations of $2.02\cdot10^{-04}$ and $9.85\cdot10^{-03}$, respectively within those clusters. S08, S17, and S18 fall outside the Case 5 main cluster.}
 \label{fig:ReasulsAll56}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\linewidth]{figures/Figure_CASE_78.png}
-\caption{Cases 7 and 8: simulated $Z$- and $MTR_{asym}$ spectra with differences to S02. The main cluster is marked in the Z-spectra plots and contained 14 (of 17) entries in Case 7 and 7 (of 17) entries in Case 8, with maximum deviations of $7.33\cdot10^{-03}$ and $2.12\cdot10^{-05}$, respectively within those clusters. In Case 7, S09, S18, and S19 deviate most strongly; Case 8 shows broader spread with several separated traces.}
+\caption{Cases 7 and 8: simulated $Z$- and $MTR_{asym}$ spectra with differences to S02. The main cluster is marked in the Z-spectra plots and contained 14 (of 17) entries in Case 7 and 9 (of 17) entries in Case 8, with maximum deviations of $5.85\cdot10^{-03}$ and $1.95\cdot10^{-04}$, respectively within those clusters. In Case 7, S08, S17, and S18 deviate most strongly; Case 8 shows broader spread with several separated traces.}
 \label{fig:ReasulsAll78}
 \end{figure}
 
@@ -368,23 +420,40 @@ In Case~2, S15b denotes an alternative solver variant of S15, which shows the la
 \label{fig:numchecks}
 \end{figure}
 
+\subsection{Largest observed versus final inter-submission spread}
+Archived spreadsheet revisions show that the final spreads are much smaller than the largest values observed during the study for most cases (Figure~\ref{fig:case5history}). Cases~3 and~5 are shown as examples: at the stage of the largest observed Case~5 spread the maximum and median point-wise $Z$ spreads were 1.45 and $6.3\times10^{-3}$, compared with the final $3.8\times10^{-3}$ and $6.7\times10^{-5}$.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\linewidth]{figures/Figure_CASE5_spread_history.png}
+\caption{Top: Case~3 $Z$ and MTR$_{\mathrm{asym}}$ (3 to 0\,ppm) beside Case~5 $Z$, with largest observed deviation (top row, red traces; Case~3 includes $z$-only MT, dotted) versus current (bottom row, green traces; $z$-only MT omitted). Bottom: for each case, the largest maximum point-wise $Z$ spread observed during the study and the median spread at that same stage, versus the final maximum and median, shown on a log scale.}
+\label{fig:case5history}
+\end{figure}
 
 
 \section{Discussion}\label{Diss}
-In this study we showed that a main cluster of agreeing simulations could be found for each case, consisting of 16 entries in the CW case, and 6 groups in the pulsed CEST case, which tentatively allows us to formulate a consensus on simulations. 
+In this study we showed that a main cluster of agreeing simulations could be found for each case, consisting of 16 entries in the CW Case 2, and 9 entries in Cases 6 and 8, which tentatively allows us to formulate a consensus on simulations. 
 However, this study also shows that Bloch-McConnell simulations are not automatically interchangeable across independent implementations, even when the nominal pool model, RF preparation pulse trains, offsets, and initialization conditions are specified. The degree of agreement depended strongly on the simulation case. The long CW 2-pool case showed close agreement, whereas shorter saturation, shaped pulses, pulse trains, and the 5-pool white-matter model all increased the observed variability. These findings indicate that benchmark cases need to include both simple reference scenarios and more clinically realistic preparations; agreement in a steady-state-like 2-pool case alone is not sufficient to validate a simulation framework for quantitative CEST applications.
+
+A major limitation of this study is the absence of an independent ground truth. 
+The benchmark compares independently developed implementations on the same specified Bloch-McConnell problem. 
+Agreement of a main cluster therefore indicates consistency among frameworks, but does not prove correctness of the underlying solution. Analytical closed-form solutions exist only for highly restricted cases or with several simplifying assumptions, and experimental spectra cannot serve as a unique reference because they include acquisition imperfections and possible model mismatch.
+This work therefore does not validate Bloch-McConnell simulations directly, but provides a community comparison and a practical baseline against which new implementations can be checked.
 
 The first round separated several sources of variability. Case 1 was intended as the simplest baseline and showed the smallest spread, suggesting that most implementations handle the basic Bloch-McConnell evolution, offset convention, and relaxation/exchange terms similarly under near steady-state conditions. 
 The larger spread in Case 2 suggests that transient behavior is more sensitive to numerical and implementation choices. Since the pool model and RF amplitude were unchanged between Cases 1 and 2, these differences point to details such as matrix exponentiation, ODE integration tolerances, pulse/discretization conventions for CW irradiation, or the precise handling of delays. The lower spread in Case 1 may reflect that the long saturation approaches a common steady-state solution, whereas the shorter preparation in Case 2 preserves differences in transient evolution.
 
-The 5-pool model introduced a second major source of variability. The comparison of full $M_{xyz}$ and $z$-only MT implementations showed that these approaches produce systematically different spectra and should not be mixed without explicit labeling. This is expected because a $z$-only semisolid pool model approximates the MT pool using longitudinal saturation and an absorption lineshape, whereas a full $M_{xyz}$ implementation evolves transverse components explicitly. Both approaches may be useful in specific contexts, but they are not equivalent for the benchmark cases used here. For this reason, $z$-only MT results were retained in the data source but excluded from the main figures. 
+The 5-pool model introduced a second major source of variability. The comparison of full $M_{xyz}$ and $z$-only MT implementations showed that these approaches produce systematically different spectra and should not be mixed without explicit labeling. This is expected because a $z$-only MT model approximates the MT pool using longitudinal saturation and an absorption lineshape, whereas a full $M_{xyz}$ implementation evolves transverse components explicitly. Both approaches may be useful in specific contexts, but they are not equivalent for the benchmark cases used here. For this reason, $z$-only MT results were retained in the data source but excluded from the main figures. 
 The lineshape of the ssMT effect is an open question in the field, with Lorentzian, super Lorentzian, Gaussian, and other lineshapes being used in different studies \cite{Asslnder2022}. Depending on the investigated tissue and the specific application, different lineshapes may be more appropriate. The present benchmark does not address this question, but it highlights that the choice of MT modeling can have a substantial impact on the simulated spectra and should be clearly specified in future studies.
 Furthermore, these lineshapes are often implemented using numerical approximations, such as discretization of the lineshape or interpolation around pole locations.
 This can introduce additional variability, and possibly errors if not implemented carefully. 
 
-The second round showed that shaped RF preparations are another important source of disagreement. The single Gaussian pulse produced the largest absolute Z-spectrum spread, even though the pulse shape was provided in a machine-readable file. This suggests that providing the shape alone does not fully eliminate ambiguity: interpolation of the RF waveform, time discretization, conversion between peak and RMS $B_1$, treatment of phase, and the specific pulse integration can all affect the result.
+The second round showed that shaped RF preparations are another important source of disagreement. The Gaussian pulse train (Case~6) produced the largest absolute Z-spectrum spread, even though the pulse shape was provided in a machine-readable file. This suggests that providing the shape alone does not fully eliminate ambiguity: interpolation of the RF waveform, time discretization, conversion between peak and RMS $B_1$, treatment of phase, and the specific pulse integration can all affect the result.
+Among standard interpolation methods the effect is small: nearest-neighbor, linear, and cubic resampling of the Case~5 Gaussian in one solver differed from Pulseq-CEST by less than $3\times10^{-4}$ in $Z$ (see Supporting Information Section~\ref{si:rfinterp}).
 The pulse-train cases further amplify these choices because small differences are repeated many times and multiple pulses necessitate accurate handling of phase evolution and relaxation during interpulse delays.
-Ambiguities in the challenge definition of the pulse shape were also reported by several participants, including the exact $B_1$ scaling, the time discretization of the pulse, and the handling of phase in the pulse train case.
+In particular, leaving a static RF frequency offset in the system matrix during $t_{\mathrm{delay}}$ is a possible implementation error that can separate submissions into distinct clusters (see Supporting Information Section~\ref{si:rfdelay} for more details).
+Ambiguities in the challenge definition of the pulse shape were also reported by several participants, including the exact $B_1$ scaling, the time discretization of the pulse, and the handling of phase in the pulse train case although we hope that the updated challenge definition in the second round clarified these points.
+
 The multi-pool model in Case 7 shows much closer agreement, indicating that the differences are not caused by the multi-pool model itself, but by the shaped pulse implementation and the long $T_1$ and $T_2$ values of water for the 2-pool model.
 The long relaxation times of water in the 2-pool model lead to a slow decay of the magnetization, which necessitates accurate simulation throughout the pulse train, as any small difference in the magnetization evolution can accumulate and lead to significant differences in the final spectrum.
 
@@ -406,21 +475,85 @@ for practical applications in all examples.
 
 The same figure shows a related effect in Case~7 for fixed-step operator-splitting timescale in S03: an overly coarse timestep of 500~$\mu$s produced a clearly incorrect spectrum, while progressively smaller timesteps converged toward the same solution. These findings support the view that solver accuracy must be validated for the specific RF preparation and exact numerical settings are important to achieve reproducible results.
 
-The benchmark therefore suggests that future simulation reports should describe not only the mathematical model, but also the numerical propagation strategy. In particular, time-step strategy, RF resampling, solver tolerances or matrix-exponential method, and convergence checks should be documented to allow a more detailed comparison of simulation results.
+
 
 \subsection{Implications for qMRI and future Bloch-McConnell simulations}
 The relationship between Z-spectrum spread and $MTR_{\mathrm{asym}}$ spread was case dependent. In some cases, large Z-spectrum differences produced comparatively small $MTR_{\mathrm{asym}}$ differences, consistent with approximately symmetric deviations.
 In other cases, especially when the 5-pool model was combined with pulsed saturation, differences became strongly asymmetric and led to larger $MTR_{\mathrm{asym}}$ variability. This is important for qCEST because many downstream analyses use asymmetry or fitted pool parameters rather than the raw Z-spectrum. A deviation that appears modest in Z can therefore still be relevant if it affects the spectral asymmetry near the fitted pool resonance.
 
-The present comparison does not yet assign all deviations to a single cause. Several factors can interact, including RF definitions, MT-pool formulation, solver choice, implementation and accuracy, and waveform discretization. In addition, some differences arose from ambiguity in the original challenge description rather than from an error in a particular simulation package. The benchmark therefore serves two purposes: it identifies cases where implementations diverge, and it tested which parts of the simulation specification need to be stated for reproducible quantitative CEST.
+To place this variability in a clinical context, we compare it with APTw imaging, which reports $MTR_{\mathrm{asym}}$ at $3.5$~ppm after pulsed saturation with $B_{1,\mathrm{rms}}=2\,\mu\mathrm{T}$ and $T_{\mathrm{sat}}=2$~s \cite{Zeyen2025}, which is very close to the saturation used in Case~7.
+In Case~7 the $MTR_{\mathrm{asym}}$ peak of the main cluster is $0.29\%$ ($2.9\times10^{-3}$), while the inter-submission $MTR_{\mathrm{asym}}$ spread is $0.035\%$ ($3.5\times10^{-4}$; median $0.015\%$). The Case~7 pool model represents healthy white matter rather than tumor, so the absolute APTw amplitude is not expected to match the glioblastoma values.
+In IDH-wildtype glioblastoma, the median APTw signal in contrast-enhancing lesions was $2.23\%$ in progressive disease versus $1.76\%$ in treatment-related effects, a difference of $0.47$ percentage points; within six months after radiotherapy the medians were $2.7\%$ versus $1.26\%$ ($1.4$ percentage points).
+The maximum Case~7 inter-submission $MTR_{\mathrm{asym}}$ spread observed during the study was $0.09\%$ ($9.2\times10^{-4}$; median $0.067\%$), about a fifth of the $0.47$ percentage-point APTw contrast and about a third of the simulated peak. 
+The current spread of $0.035\%$, after debugging simulations and revised submissions, is about an eighth of that peak and about an order of magnitude below the $0.47$ percentage-point contrast.
 
-A practical implication is that future CEST simulation studies should report implementation details that are often omitted, including whether MT pools are modeled as full $M_{xyz}$ or $z$-only systems, how shaped RF pulses are discretized and scaled, how phase evolution between pulses is treated, and how magnetization is initialized between offsets. The challenge repository has already been updated to clarify several of these points (\url{https://github.com/pulseq-cest/BMsim_challenge}). Continued use of shared machine-readable definitions, together with reference results and open analysis scripts, should make it possible to distinguish model choices from unintended implementation differences.
+The current Case~7 spread is therefore smaller than those clinical contrasts, whereas the maximum spread during the study was a substantial fraction of the smaller APTw contrast. 
+Other implementation choices can still be large enough to affect quantitative interpretation when the expected contrast is small.
+Studies that rely on Bloch-McConnell simulations for quantitative CEST analysis should therefore be aware of the potential for implementation-dependent variability and the effect that this can have on the interpretation of results.
+For example, if a study uses a Bloch-McConnell simulation to fit pool fraction or exchange rate, the choice of $z$-only versus full $M_{xyz}$ MT implementation can lead to systematic differences in the fitted parameters in the order of 30\% as shown by Schuenke et al. \cite{Schuenke2023}.
+
+
+The present comparison does not yet assign all deviations to a single cause. Several factors can interact, including RF definitions, MT-pool formulation, solver choice, implementation and accuracy, and waveform discretization. In addition, some differences arose from ambiguity in the original challenge description rather than from an error in a particular simulation package. 
+The benchmark therefore serves two purposes: it identifies cases where implementations diverge, and it tested which parts of the simulation specification need to be stated for reproducible quantitative CEST.
+
+
 
 As a reference simulation we suggest the BMCTool results (S02) \cite{SchuenkeBMC}, which showed no significant deviation from the main cluster of results. The tool is easy to use with its Python interface and support for pulseq files. Therefore, comparing against BMCTool provides a quick and easy check for reasonable results, with small deviations being possible due to the above-mentioned implementation details. 
 
+\subsection{Take-home recommendations and reporting guidelines}\label{subsec:recs}
+The challenge shows that some implementation choices are critical, whereas others are less consequential if they are applied carefully.
+Critical choices include the MT formulation (full $M_{xyz}$ versus $z$-only MT), the definition and discretization of the RF waveform (peak versus RMS $B_1$, interpolation, and phase), the handling of interpulse delays, and whether magnetization is reset between offsets.
+The solver class itself appears less consequential: matrix exponentials, ODE integrators, and operator splitting all reached very close results in the main cluster when time steps or tolerances were adequate.
+Floating-point precision can introduce visible noise in long transient simulations, but the single-precision examples remained close enough for practical purposes.
+
+When developing a new Bloch-McConnell simulation implementation, we recommend the following steps before using it for quantitative CEST analysis:
+First, compare Case~1 against the main cluster of results to test offset convention, sign, relaxation, and exchange under near steady-state CW conditions.
+Second, Case~2 tests transient CW evolution, where differences due to time-step, tolerance, and floating-point choices may become visible.
+Third, if an MT pool is used, Case~3 should be compared, if the implementation supports full $M_{xyz}$ MT. If only $z$-only MT is implemented, the results should be clearly labeled as such and compared with other $z$-only MT implementations.
+Fourth, if the intended application uses shaped pulses or pulse trains, Cases~5--7 should be run to check for the correct implementation of the RF waveform, interpulse delays, and phase evolution.
+
+
+\begin{table}[htbp]
+\centering
+\caption{$Z$-spectrum range from the main cluster of agreeing submissions. $\Delta Z_{\mathrm{cluster}}$ is the maximum point-wise deviation within that cluster, as marked in Figures~\ref{fig:ReasulsAll12}--\ref{fig:ReasulsAll78}. These values indicate the level of agreement achieved by the community, not a validated error bound or ground truth.}
+\label{tab:consensus}
+\small
+\begin{tabular}{lcc}
+\toprule
+Case & Entries in cluster & $\Delta Z_{\mathrm{cluster}}$ \\
+\midrule
+1 (CW, $15$~s, 2-pool) & 18 of 19 & $9.2\times10^{-4}$ \\
+2 (CW, $2$~s, 2-pool) & 16 of 20 & $2.7\times10^{-4}$ \\
+3 (CW, $2$~s, 5-pool) & 18 of 19 & $5.9\times10^{-4}$ \\
+4 (WASABI block, 5-pool) & 18 of 19 & $9.5\times10^{-4}$ \\
+5 (Gaussian pulse, 2-pool) & 13 of 16 & $2.0\times10^{-4}$ \\
+6 (Gaussian train, 2-pool) & 9 of 17 & $9.8\times10^{-3}$ \\
+7 (Gaussian train, 5-pool) & 14 of 17 & $5.8\times10^{-3}$ \\
+8 (WASABI train, 5-pool) & 9 of 17 & $2.0\times10^{-4}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:consensus} can be used as a benchmark: a new implementation that remains within the corresponding cluster range for the relevant cases, i.e. if comparing against S02, is consistent with the community result reported here.
+This should not be read as an acceptable-error threshold or as proof of correctness.\\
+
+To make comparisons and reproducibility easier, future Bloch-McConnell simulation studies should report at least the following:
+\begin{itemize}
+\item Pool model: relative pool sizes $f$, $T_1$, $T_2$, exchange rates $k$, and chemical shifts, ideally as a machine-readable file.
+\item MT pool: full $M_{xyz}$ or $z$-only MT, and the absorption lineshape if $z$-only MT is used.
+\item RF and sequence: $B_1$ definition (peak or RMS), waveform sampling or interpolation, pulse phase, interpulse delays, whether the RF frequency offset is reset during delays, spoiler delay, and gyromagnetic ratio.
+\item Initialization: whether $Z_i=1$ is reset before each offset, or a recovery delay is simulated.
+\item Numerical solver: solver class, time-step strategy or tolerances, floating-point precision, and any convergence checks.
+\item Furthermore authors could reference this work and note if they compared against the results shown here in the consensus table.
+\end{itemize}
+
 
 \section{Conclusion}\label{Conc}
-This benchmark shows that independent Bloch-McConnell simulation frameworks can agree closely for simple reference cases, but may diverge substantially for transient saturation, shaped RF pulses, pulse trains, and multi-pool models with MT. Clear specification of MT modeling, RF power definitions, pulse discretization, and initialization conditions is therefore essential for reproducible quantitative CEST. For newly implemented simulations we suggest comparing against the BMCTool results (S02). The provided open challenge data and analysis scripts provide a basis for continued community validation and for developing more standardized CEST simulation practice. 
+This benchmark shows that independent Bloch-McConnell simulation frameworks can agree closely for simple reference cases, but may diverge substantially for transient saturation, shaped RF pulses, pulse trains, and multi-pool models with MT.
+Agreement improved strongly over the course of the study: for most cases the final maximum and median $Z$ spreads are substantially smaller than the largest values observed earlier, by up to two to three orders of magnitude (e.g.\ Case~5 from a maximum of 1.45 to $3.8\times10^{-3}$; Table~\ref{tab:spreadhistory}).
+Clear specification of MT modeling, RF power definitions, pulse discretization, and initialization conditions is therefore essential for reproducible quantitative CEST.
+For newly implemented simulations we suggest comparing against the BMCTool results (S02)  and against the cluster ranges and reporting guidelines in Section~\ref{subsec:recs}.
+The provided open challenge data and analysis scripts provide a basis for continued community comparison and for developing more standardized CEST simulation practice. 
 
 % This is a seperate field in the online submission form, but we include it here for completeness.
 % \subsection*{Data Availability Statement}
