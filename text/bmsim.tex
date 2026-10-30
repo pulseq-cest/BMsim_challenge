@@ -113,6 +113,7 @@ Moritz Zaiss\affil{6}
 \noindent\textbf{Results:} For simple two-pool CW saturation (cases 1--2), most submissions agreed within $\sim 10^{-4}$ in $Z$-spectra difference, but residual spread exceeded numerical precision. 
 By contrast, marked differences were observed in the simulations for the five-pool model (cases 3--4) and time-dependent saturation pulses (cases 5--7). 
 The different implementation of the magnetization transfer (MT) pool was identified as a major contributor to these differences. 
+
 Good agreement was achieved for a single Gaussian pulse (case 5); pulse trains (cases 6--7) displayed larger differences, related to the interpulse delays. The two-pulse WASABI scheme (case 8) showed similar problems.
 
 The final observed differences in the simulations could lead to biases of tens of percent in the fitted pool fractions or exchange rates. 
@@ -195,13 +196,13 @@ Model & Pool & $f$ & $T_1$ (s) & $T_2$ (s) & $k$ (Hz) & $\delta_\omega$ (ppm) \\
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.9\linewidth,height=0.8\textheight,keepaspectratio]{figures/Pulses.pdf}
-\caption{Saturation types for all tested cases. Cases 1 to 4 use CW saturation with different saturation times. Cases 5, 6 and 7 use one or multiple Gaussian pulses and Case 8 repeats the CW saturation of Case 4 with a short interpulse delay. Note the spoiler delay after the pulses visible for short saturation cases.  }
+\includegraphics[width=\linewidth]{figures/Figure_1_cases_overview.pdf}
+\caption{Overview of all eight cases, one row per case. Left: saturation scheme. Cases 1 to 4 use CW saturation with different saturation times. Cases 5, 6 and 7 use one or multiple Gaussian pulses and Case 8 repeats the CW saturation of Case 4 with a short interpulse delay. The gray area marks the 6.5~ms spoiler delay after saturation, which is visible for short saturation cases. Middle and right: exemplary $Z$-spectra and $MTR_{\mathrm{asym}}$, simulated with the MATLAB Pulseq-CEST implementation (equivalent to submission S01).}
 \label{fig:Pules}
 \end{figure}
 
 \subsection{Simulation Cases}
-In total, eight cases of increasing complexity were compared in two rounds on the pool models described in Section \ref{pool_models}. An overview with the parameters for all cases is listed in Table \ref{table_sim_cases}, the saturation pulses are shown in Figure \ref{fig:Pules} and example $Z$-spectra for all cases are shown in Figure \ref{fig:RefResultsAllCases}. These spectra were generated using the MATLAB implementation of Pulseq-CEST \cite{Herz2021} and are equivalent to submission S01.
+In total, eight cases of increasing complexity were compared in two rounds on the pool models described in Section \ref{pool_models}. An overview with the parameters for all cases is listed in Table \ref{table_sim_cases}, the saturation pulses are shown in Figure \ref{fig:Pules} (left column) and example $Z$-spectra for all cases are shown in Figure \ref{fig:Pules} (middle and right columns). These spectra were generated using the MATLAB implementation of Pulseq-CEST \cite{Herz2021} and are equivalent to submission S01.
 
 \subsubsection{Round 1}
 
@@ -325,19 +326,12 @@ The main cluster was identified automatically for each case by ranking submissio
 
 
 \subsection{Numerical implementation checks}\label{subsec:methods:numchecks}
-Two additional analyses were performed to illustrate how numerical settings can affect CEST simulations. For the BART submission (S14), single- and double-precision variants were compared with the reference S02 in Case~1 and Case~2. For the operator-splitting MATLAB submission S03, Case~7 $Z$-spectra were calculated using multiple fixed timesteps from 500 to 5~$\mu$s.
+Two additional analyses were performed to illustrate how numerical settings can affect CEST simulations. For the BART submission (S14), single- and double-precision variants were compared with the reference S02 in Case~1 and Case~2. For the operator-splitting MATLAB submission S03, Case~7 $Z$-spectra were calculated using multiple fixed timesteps from 500 to 5~$\mu$s (Supporting Information Section~\ref{si:numchecks}).
 
 
 \section{Results}\label{Results}
 The results of the study were collected 
 online at: \url{https://docs.google.com/spreadsheets/d/1JN7VN-f1ktDrJgokb0FlUFwkH0MWYlPA_jSfnQoFOVc/} and are archived here: \url{https://doi.org/10.5281/zenodo.21265597}. A simple evaluation script is available at \url{https://colab.research.google.com/drive/1csiIjK-fiftdb7OwvJ84gWuv8lLADgv7}.
-
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=1\linewidth,height=0.9\textheight,keepaspectratio]{figures/All_Cases_Z_and_MTRasym_ref.pdf}
-\caption{Exemplary z-spectra and $MTR_{asym}$ for all eight tested cases, simulated with the MATLAB pulseq-cest implementation.}
-\label{fig:RefResultsAllCases}
-\end{figure}
 
 \subsection{Round 1 results}
 All results for Cases 1 and 2 are shown in Figure \ref{fig:ReasulsAll12}. Case 1 showed the closest agreement among the Round 1 scenarios. After excluding the normalization offset, the maximum spread across the submitted Z-spectra was $1.4 \times 10^{-3}$, while the median point-wise Z spread was $4.0 \times 10^{-5}$. The corresponding maximum and median $MTR_{\mathrm{asym}}$ spreads were $9.3 \times 10^{-5}$ and $1.3 \times 10^{-5}$, respectively.
@@ -366,7 +360,7 @@ All results for Cases 7 and 8 are shown in Figure \ref{fig:ReasulsAll78}. Case 7
 Case 8 showed a different pattern. The short two-pulse WASABI-like preparation produced visible Z-spectrum differences, with maximum and median Z spreads of 0.079 and 0.033. The $MTR_{\mathrm{asym}}$ curves showed maximum and median spreads of $6.4 \times 10^{-4}$ and $1.7 \times 10^{-4}$, respectively. 
 
 \subsection{Numerical precision and time-step convergence}\label{subsec:res:numchecks}
-Figure~\ref{fig:numchecks} summarizes two numerical implementation checks. The BART comparison shows that single- and double-precision arithmetic can produce visibly different spectra, even when the underlying solver and pool model are identical. The clearest example was Case~2 ($2$~s CW saturation on the 2-pool model), where single-precision BART showed high-frequency oscillatory noise in the difference plots. The maximum point-wise deviation from S02 was approximately $1.1 \times 10^{-3}$ in $Z$ for single precision and $2.6 \times 10^{-4}$ for double precision, corresponding to an approximately fourfold reduction in peak numerical error. The mean point-wise deviation was reduced from $5.6 \times 10^{-4}$ to $3.2 \times 10^{-5}$. Case~1 ($15$~s CW saturation) showed the same pattern at smaller amplitude.
+Supporting Information Figure~\ref{fig:si-numchecks} summarizes two numerical implementation checks. The BART comparison shows that single- and double-precision arithmetic can produce visibly different spectra, even when the underlying solver and pool model are identical. The clearest example was Case~2 ($2$~s CW saturation on the 2-pool model), where single-precision BART showed high-frequency oscillatory noise in the difference plots. The maximum point-wise deviation from S02 was approximately $1.1 \times 10^{-3}$ in $Z$ for single precision and $2.6 \times 10^{-4}$ for double precision, corresponding to an approximately fourfold reduction in peak numerical error. The mean point-wise deviation was reduced from $5.6 \times 10^{-4}$ to $3.2 \times 10^{-5}$. Case~1 ($15$~s CW saturation) showed the same pattern at smaller amplitude.
 
 The fixed-timestep analysis for submission S03 in Case~7 shows a related effect. A timestep of 500~$\mu$s produced a clearly different $Z$-spectrum, reducing the timestep to 100~$\mu$s produces a normal looking spectrum, which still deviates from the finest timestep of 5~$\mu$s by over 10\%. Halving the timestep to 50~$\mu$s reduces the deviation to less than 5\% and further reducing the timestep to 10~$\mu$s produces a spectrum that is indistinguishable (at the shown scale) from the finest timestep.
 
@@ -413,22 +407,15 @@ In Case~2, S14, S15, S15b, and S17 fall outside the main cluster; S15b is an alt
 \label{fig:ReasulsAll78}
 \end{figure}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=1\linewidth]{figures/Figure_numerical_checks.png}
-\caption{Numerical implementation checks. Left and center: single- and double-precision BART simulations (S14 and S14b) compared with the reference S02 for Cases~1 and~2; difference panels show deviations from S02. Right: Case~7 $Z$- and $MTR_{\mathrm{asym}}$ spectra for submission S03 simulated with fixed timesteps from 500 to 5~$\mu$s; difference panels show deviations from the finest timestep (5~$\mu$s). Axis limits in the Case~7 difference panels were chosen to highlight agreement among the smaller timesteps.}
-\label{fig:numchecks}
-\end{figure}
-
 \subsection{Largest observed versus final inter-submission spread}
-Archived spreadsheet revisions show that the final spreads are much smaller than the largest values observed during the study for most cases (Figure~\ref{fig:case5history}). Cases~3 and~5 are shown as examples: at the stage of the largest observed Case~5 spread the maximum and median point-wise $Z$ spreads were 1.45 and $6.3\times10^{-3}$, compared with the final $3.8\times10^{-3}$ and $6.7\times10^{-5}$.
-
+Archived spreadsheet revisions show that the final spreads are much smaller than the largest values observed during the study for most cases (Figure~\ref{fig:case5history}). Cases~3 and~5 are shown as examples: at the stage of the largest observed Case~5 spread the maximum and median point-wise $Z$ spreads were 1.45 and $6.3\times10^{-3}$, compared with the final $3.8\times10^{-3}$ and $6.7\times10^{-5}$. 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\linewidth]{figures/Figure_CASE5_spread_history.png}
 \caption{Top: Case~3 $Z$ and MTR$_{\mathrm{asym}}$ (3 to 0\,ppm) beside Case~5 $Z$, with largest observed deviation (top row, red traces; Case~3 includes $z$-only MT, dotted) versus current (bottom row, green traces; $z$-only MT omitted). Bottom: for each case, the largest maximum point-wise $Z$ spread observed during the study and the median spread at that same stage, versus the final maximum and median, shown on a log scale.}
 \label{fig:case5history}
 \end{figure}
+
 
 
 \section{Discussion}\label{Diss}
@@ -465,7 +452,7 @@ One important distinction is whether the simulation uses fixed or adaptive time 
 
 Adaptive ODE solvers and matrix-exponential approaches avoid some of these limitations, but introduce their own implementation choices. ODE solvers depend on tolerances, step sizes, and event discretization. Matrix-exponential approaches depend on how the RF waveform is divided into constant-amplitude intervals and how the exponential is evaluated, for example by Pad\'e approximation or eigenvalue decomposition. For well-conditioned problems and carefully implemented solver choices these approaches should converge to the same solution, but differences can appear for long transient solutions with slow decays, when the RF pulse is coarsely sampled, when the ODE becomes stiff due to very short decay times, or approximations are used without convergence checks.
 
-Figure~\ref{fig:numchecks} illustrates the impact of floating point precision
+Supporting Information Figure~\ref{fig:si-numchecks} illustrates the impact of floating point precision
 for the BART implementation.
 In Case~2 (CW transient saturation), single-precision arithmetic introduced visible high-frequency noise in the difference spectra, whereas the double-precision variant reduced the peak numerical error by approximately a factor of four and the mean point-wise error by more than an order of magnitude. 
 This indicates that floating-point precision can affect even CW CEST simulations when transient evolution is resolved over many integration steps.
@@ -513,29 +500,9 @@ Third, if an MT pool is used, Case~3 should be compared, if the implementation s
 Fourth, if the intended application uses shaped pulses or pulse trains, Cases~5--7 should be run to check for the correct implementation of the RF waveform, interpulse delays, and phase evolution.
 
 
-\begin{table}[htbp]
-\centering
-\caption{$Z$-spectrum range from the main cluster of agreeing submissions. $\Delta Z_{\mathrm{cluster}}$ is the maximum point-wise deviation within that cluster, as marked in Figures~\ref{fig:ReasulsAll12}--\ref{fig:ReasulsAll78}. These values indicate the level of agreement achieved by the community, not a validated error bound or ground truth.}
-\label{tab:consensus}
-\small
-\begin{tabular}{lcc}
-\toprule
-Case & Entries in cluster & $\Delta Z_{\mathrm{cluster}}$ \\
-\midrule
-1 (CW, $15$~s, 2-pool) & 18 of 19 & $9.2\times10^{-4}$ \\
-2 (CW, $2$~s, 2-pool) & 16 of 20 & $2.7\times10^{-4}$ \\
-3 (CW, $2$~s, 5-pool) & 18 of 19 & $5.9\times10^{-4}$ \\
-4 (WASABI block, 5-pool) & 18 of 19 & $9.5\times10^{-4}$ \\
-5 (Gaussian pulse, 2-pool) & 13 of 16 & $2.0\times10^{-4}$ \\
-6 (Gaussian train, 2-pool) & 9 of 17 & $9.8\times10^{-3}$ \\
-7 (Gaussian train, 5-pool) & 14 of 17 & $5.8\times10^{-3}$ \\
-8 (WASABI train, 5-pool) & 9 of 17 & $2.0\times10^{-4}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Table~\ref{tab:consensus} can be used as a benchmark: a new implementation that remains within the corresponding cluster range for the relevant cases, i.e. if comparing against S02, is consistent with the community result reported here.
-This should not be read as an acceptable-error threshold or as proof of correctness.\\
+The main clusters of agreeing submissions (Figures~\ref{fig:ReasulsAll12}--\ref{fig:ReasulsAll78}) contained 18 of 19, 16 of 20, 18 of 19, 18 of 19, 13 of 16, 9 of 17, 14 of 17, and 9 of 17 entries for Cases~1--8, with maximum point-wise deviations within the cluster ($\Delta Z_{\mathrm{cluster}}$) of $9.2\times10^{-4}$, $2.7\times10^{-4}$, $5.9\times10^{-4}$, $9.5\times10^{-4}$, $2.0\times10^{-4}$, $9.8\times10^{-3}$, $5.8\times10^{-3}$, and $2.0\times10^{-4}$, respectively.
+These cluster ranges can be used as a benchmark: a new implementation that remains within the corresponding cluster range for the relevant cases, i.e. if comparing against S02, is consistent with the community result reported here.
+They indicate the level of agreement achieved by the community and should not be read as an acceptable-error threshold, a validated error bound, or proof of correctness.\\
 
 To make comparisons and reproducibility easier, future Bloch-McConnell simulation studies should report at least the following:
 \begin{itemize}
@@ -544,13 +511,13 @@ To make comparisons and reproducibility easier, future Bloch-McConnell simulatio
 \item RF and sequence: $B_1$ definition (peak or RMS), waveform sampling or interpolation, pulse phase, interpulse delays, whether the RF frequency offset is reset during delays, spoiler delay, and gyromagnetic ratio.
 \item Initialization: whether $Z_i=1$ is reset before each offset, or a recovery delay is simulated.
 \item Numerical solver: solver class, time-step strategy or tolerances, floating-point precision, and any convergence checks.
-\item Furthermore authors could reference this work and note if they compared against the results shown here in the consensus table.
+\item Furthermore authors could reference this work and note if they compared against the main-cluster ranges reported here.
 \end{itemize}
 
 
 \section{Conclusion}\label{Conc}
 This benchmark shows that independent Bloch-McConnell simulation frameworks can agree closely for simple reference cases, but may diverge substantially for transient saturation, shaped RF pulses, pulse trains, and multi-pool models with MT.
-Agreement improved strongly over the course of the study: for most cases the final maximum and median $Z$ spreads are substantially smaller than the largest values observed earlier, by up to two to three orders of magnitude (e.g.\ Case~5 from a maximum of 1.45 to $3.8\times10^{-3}$; Table~\ref{tab:spreadhistory}).
+Agreement improved strongly over the course of the study: for most cases the final maximum and median $Z$ spreads are substantially smaller than the largest values observed earlier, by up to two to three orders of magnitude (e.g.\ Case~5 from a maximum of 1.45 to $3.8\times10^{-3}$; Figure~\ref{fig:case5history}).
 Clear specification of MT modeling, RF power definitions, pulse discretization, and initialization conditions is therefore essential for reproducible quantitative CEST.
 For newly implemented simulations we suggest comparing against the BMCTool results (S02)  and against the cluster ranges and reporting guidelines in Section~\ref{subsec:recs}.
 The provided open challenge data and analysis scripts provide a basis for continued community comparison and for developing more standardized CEST simulation practice. 
